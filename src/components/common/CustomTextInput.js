@@ -2,7 +2,7 @@ import React from 'react';
 import {TextInput, StyleSheet, View} from 'react-native';
 import {color} from '../../styles/color';
 
-export default function CustomTextInput(props) {
+const CustomTextInput = props => {
   return (
     <View style={styles.container}>
       <TextInput
@@ -12,7 +12,9 @@ export default function CustomTextInput(props) {
       />
     </View>
   );
-}
+};
+
+export default CustomTextInput;
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +25,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: color.grey2,
-    color: 'white',
     marginBottom: 15,
     width: '90%',
     color: color.black,

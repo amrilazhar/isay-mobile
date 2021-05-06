@@ -12,11 +12,12 @@ import FilterFeed from './screen/FilterFeed';
 import MainTab from './screen/MainTab';
 import StatusDetails from './screen/StatusDetails';
 import Messages from './screen/Messages';
+import Chat from './screen/Chat';
 
 const Stack = createStackNavigator();
 
 const RootStackScreen = ({navigation}) => (
-  <Stack.Navigator headerMode="none" initialRouteName="MainTab">
+  <Stack.Navigator headerMode="none" initialRouteName="Splas">
     <Stack.Screen name="Splash" component={Splash} />
     <Stack.Screen name="MainTab" component={MainTab} />
     <Stack.Screen name="Login" component={Login} />
@@ -29,6 +30,7 @@ const RootStackScreen = ({navigation}) => (
     <Stack.Screen name="FilterFeed" component={FilterFeed} />
     <Stack.Screen name="StatusDetails" component={StatusDetails} />
     <Stack.Screen name="Messages" component={Messages} />
+    <Stack.Screen name="Chat" component={Chat} />
   </Stack.Navigator>
 );
 

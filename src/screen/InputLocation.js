@@ -4,7 +4,7 @@ import SearchLocation from '../components/common/SearchLocation';
 import CustomButton from '../components/common/CustomButton';
 import {color} from '../styles/color';
 
-const InputLocation = () => {
+const InputLocation = ({navigation}) => {
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View View style={styles.container}>
@@ -19,7 +19,10 @@ const InputLocation = () => {
         </View>
         <SearchLocation />
         <View style={styles.button}>
-          <CustomButton title="Next" />
+          <CustomButton
+            title="Next"
+            onPressButton={() => navigation.navigate('Question')}
+          />
         </View>
       </View>
     </ScrollView>

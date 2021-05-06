@@ -26,7 +26,10 @@ const Login = ({navigation}) => {
         <CustomTextInput />
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
         <View style={styles.container1}>
-          <CustomButton title="Login" />
+          <CustomButton
+            title="Login"
+            onPressButton={() => navigation.navigate('MainTab')}
+          />
           <View style={styles.signUp}>
             <Text>Haven't an account yet? </Text>
             <Text

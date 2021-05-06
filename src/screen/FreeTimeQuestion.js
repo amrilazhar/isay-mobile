@@ -4,7 +4,7 @@ import {color} from '../styles/color';
 import CustomButton from '../components/common/CustomButton';
 import CustomCheckbox from '../components/common/CustomCheckbox';
 
-const FreeTimeQuestion = () => {
+const FreeTimeQuestion = ({navigation}) => {
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View View style={styles.container}>
@@ -29,7 +29,10 @@ const FreeTimeQuestion = () => {
         <CustomCheckbox title="No free time, always work" />
         <CustomCheckbox title="Make a to do lost for tomorrow" />
         <View style={styles.button}>
-          <CustomButton title="Next" />
+          <CustomButton
+            title="Next"
+            onPressButton={() => navigation.navigate('AlwaysDoQuestion')}
+          />
         </View>
       </View>
     </ScrollView>

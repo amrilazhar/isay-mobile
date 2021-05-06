@@ -1,9 +1,10 @@
 import React from 'react';
-import {StyleSheet, TextInput, View, Text} from 'react-native';
+import {StyleSheet, TextInput, View, Text, Image} from 'react-native';
 import {color} from '../styles/color';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Person from '../components/common/Person';
 
 const Messages = () => {
   return (
@@ -20,7 +21,8 @@ const Messages = () => {
         </View>
         <Entypo name="dots-three-horizontal" size={25} color={color.white} />
       </View>
-      <Text></Text>
+
+      <Person />
     </View>
   );
 };

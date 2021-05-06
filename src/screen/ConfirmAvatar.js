@@ -4,7 +4,7 @@ import SearchLocation from '../components/common/SearchLocation';
 import CustomButton from '../components/common/CustomButton';
 import {color} from '../styles/color';
 
-const ConfirmAvatar = () => {
+const ConfirmAvatar = ({navigation}) => {
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View style={styles.container}>
@@ -17,7 +17,6 @@ const ConfirmAvatar = () => {
             />
           </View>
           <Text style={styles.text1}>Anpanman</Text>
-
           <Text style={styles.text2}>You are interested in</Text>
           <Text style={styles.text3}>You can change this later</Text>
         </View>
@@ -54,7 +53,10 @@ const ConfirmAvatar = () => {
           </Text>
         </View>
         <View style={styles.button}>
-          <CustomButton title="Start" />
+          <CustomButton
+            title="Start"
+            onPressButton={() => navigation.navigate('MainTab')}
+          />
         </View>
       </View>
     </ScrollView>

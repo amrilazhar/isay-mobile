@@ -28,7 +28,10 @@ const Register = ({navigation}) => {
         <Text style={styles.password}>Confirm your Password</Text>
         <CustomTextInput />
         <View style={styles.container1}>
-          <CustomButton title="Create an Account" />
+          <CustomButton
+            title="Create an Account"
+            onPressButton={() => navigation.navigate('InputLocation')}
+          />
           <View style={styles.signUp}>
             <Text>Already have an account? </Text>
             <Text

@@ -4,7 +4,7 @@ import SearchLocation from '../components/common/SearchLocation';
 import CustomButton from '../components/common/CustomButton';
 import {color} from '../styles/color';
 
-const Question = () => {
+const Question = ({navigation}) => {
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View View style={styles.container}>
@@ -31,7 +31,10 @@ const Question = () => {
           </Text>
         </View>
         <View style={styles.button}>
-          <CustomButton title="Yes, get my Avatar" />
+          <CustomButton
+            title="Yes, get my Avatar"
+            onPressButton={() => navigation.navigate('FreeTimeQuestion')}
+          />
         </View>
       </View>
     </ScrollView>

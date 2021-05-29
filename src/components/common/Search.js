@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {color} from '../../styles/color';
 
-const Search = ({title}) => {
+const Search = ({navigation}) => {
   // const goBack = () => {
   // navigation();
   // };
@@ -24,7 +24,12 @@ const Search = ({title}) => {
           placeholder={'Search annonymous'}
         />
       </View>
-      <MaterialIcons name="filter-tilt-shift" size={30} color={color.white} />
+      <MaterialIcons
+        onPress={() => navigation.navigate('FilterFeed')}
+        name="filter-tilt-shift"
+        size={30}
+        color={color.white}
+      />
     </View>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import {color} from '../../styles/color';
 
-const Person = () => {
+const Person = ({navigation}) => {
   return (
     <View style={{padding: 10, flex: 1}}>
       <View
@@ -29,7 +29,9 @@ const Person = () => {
             <Text>3h ago</Text>
           </View>
           <View style={{width: '70%'}}>
-            <Text style={styles.text}>
+            <Text
+              style={styles.text}
+              onPress={() => navigation.navigate('Chat')}>
               React Native combines the best parts of native development with
               React
             </Text>

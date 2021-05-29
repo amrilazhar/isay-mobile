@@ -1,12 +1,76 @@
-import React from 'react';
-import {StyleSheet, Text, View, Image, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ScrollView,
+  FlatList,
+  SafeAreaView,
+} from 'react-native';
 import {color} from '../styles/color';
+import axios from 'axios';
 import CustomButton from '../components/common/CustomButton';
 import CustomCheckbox from '../components/common/CustomCheckbox';
 
-const FreeTimeQuestion = ({navigation}) => {
+const FreeTimeQuestion = ({route, navigation}) => {
+  const {locationSelected} = route.params;
+
+  const [activity, setActivity] = useState([]);
+  const [isRefresh, setIsRefresh] = useState(false);
+  const [activitySelected, setActivitySelected] = useState([]);
+
+  // console.log('activityList', activitySelected);
+
+  // useEffect(() => {
+  // }, [isRefresh]);
+  // console.log(activity);
+  // console.log('route', route);
+
+  useEffect(() => {
+    axios
+      .get('https://isay.gabatch11.my.id/utils/interest/activity')
+      .then(response => {
+        setActivity(response.data.data);
+
+        // console.log('test activity', response.data.data);
+      })
+      .catch(error => console.log('error: ', error));
+  }, [activitySelected]);
+
+  const interest = id => {
+    let selectedActivity = activitySelected;
+
+    if (selectedActivity.length == 0) {
+      selectedActivity.push(id);
+    } else {
+      let idx = selectedActivity.findIndex(activityid => activityid == id);
+      if (idx == -1) {
+        selectedActivity.push(id);
+      } else {
+        selectedActivity.splice(idx, 1);
+      }
+    }
+    // console.log('run', selectedActivity);
+    setActivitySelected(activitySelected);
+    setIsRefresh(!isRefresh);
+  };
+
+  const renderItem = ({item}) => {
+    // console.log('item', item);
+
+    return (
+      <CustomCheckbox
+        title={item.interest}
+        id={item._id}
+        activitySelected={activitySelected}
+        onPress={() => interest(item._id)}
+      />
+    );
+  };
+
   return (
-    <ScrollView contentContainerStyle={{flexGrow: 1}}>
+    <SafeAreaView style={{flex: 1}}>
       <View View style={styles.container}>
         <Text style={styles.welcome}>What do you do in your free time?</Text>
         <View style={styles.container1}>
@@ -14,28 +78,26 @@ const FreeTimeQuestion = ({navigation}) => {
             *Min. choose 3 activities. You can choose as much as you want
           </Text>
         </View>
-        <CustomCheckbox title="Watching Movies" />
-        <CustomCheckbox title="Sleep" />
-        <CustomCheckbox title="Study" />
-        <CustomCheckbox title="Talking with friends or family" />
-        <CustomCheckbox title="Shopping" />
-        <CustomCheckbox title="Cook" />
-        <CustomCheckbox title="Go to the mall" />
-        <CustomCheckbox title="Make music" />
-        <CustomCheckbox title="Play music instruments" />
-        <CustomCheckbox title="Do sports" />
-        <CustomCheckbox title="Do body care/ skin care" />
-        <CustomCheckbox title="Make new friends true social media" />
-        <CustomCheckbox title="No free time, always work" />
-        <CustomCheckbox title="Make a to do lost for tomorrow" />
+
+        <FlatList
+          data={activity}
+          renderItem={renderItem}
+          keyExtractor={item => item._id}
+        />
+
         <View style={styles.button}>
           <CustomButton
             title="Next"
-            onPressButton={() => navigation.navigate('AlwaysDoQuestion')}
+            onPressButton={() =>
+              navigation.navigate('InterestTopic', {
+                locationSelected,
+                activitySelected,
+              })
+            }
           />
         </View>
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -66,8 +128,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   button: {
-    flex: 1,
-    marginBottom: 50,
+    flex: 0.1,
+    marginBottom: 30,
     justifyContent: 'flex-end',
   },
 });

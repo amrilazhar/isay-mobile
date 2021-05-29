@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,10 +7,56 @@ import {
   Image,
   Keyboard,
 } from 'react-native';
+import axios from 'axios';
 import CustomButton from '../components/common/CustomButton';
 import CustomTextInput from '../components/common/CustomTextInput';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
+  // const dispatch = useDispatch();
+
+  const [email, setEmail] = useState('lisanewell76@gmail.com');
+  const [password, setPassword] = useState('Aneh1234!!');
+
+  const handleLogin = async () => {
+    try {
+      const {data} = await axios({
+        method: 'POST',
+        url: 'https://isay.gabatch11.my.id/user/login',
+        data: {
+          email,
+          password,
+        },
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      // console.log('token', data.data.token);
+      AsyncStorage.setItem('accessToken', data.data.token);
+
+      // setEmail('');
+      // setPassword('');
+      // console.log('id', data.data.id);
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: `https://isay.gabatch11.my.id/user/status_profile/${data.data.id}`,
+          headers: {
+            Authorization: 'Bearer ' + data.data.token,
+          },
+        });
+        // console.log('response', response);
+
+        navigation.navigate('MainTab');
+      } catch (error) {
+        navigation.navigate('Question');
+      }
+    } catch (error) {
+      console.log('err', error);
+      alert('email or password is wrong', error);
+    }
+  };
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View style={styles.container}>
@@ -21,15 +67,21 @@ const Login = ({navigation}) => {
           />
         </View>
         <Text style={styles.email}>E-mail</Text>
-        <CustomTextInput />
+        <CustomTextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+        />
         <Text style={styles.password}>Password</Text>
-        <CustomTextInput />
+        <CustomTextInput
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
         <View style={styles.container1}>
-          <CustomButton
-            title="Login"
-            onPressButton={() => navigation.navigate('MainTab')}
-          />
+          <CustomButton title="Login" onPressButton={() => handleLogin()} />
           <View style={styles.signUp}>
             <Text>Haven't an account yet? </Text>
             <Text
@@ -86,3 +138,5 @@ const styles = StyleSheet.create({
     height: 70,
   },
 });
+
+//

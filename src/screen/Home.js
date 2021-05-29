@@ -1,36 +1,48 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
 import PostCard from '../components/common/PostCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import Search from '../components/common/Search';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getStatusByUserInterestAction,
+  getStatusDetailsAction,
+} from '../redux/action/Action';
 
-const Home = () => {
-  const [post, setPost] = useState([
-    {
-      id: 1,
-      name: 'Riwan',
-      status:
-        'React Native combines the best parts of native development with React, a best-in-class JavaScript library for building user interfaces.',
-    },
-    {
-      id: 2,
-      name: 'Die Weeb',
-      status:
-        'Many platforms, one React. Create platform-specific versions of components so a single codebase can share code across platforms. With React Native, one team can maintain two platforms and share a common technology—React.',
-    },
-  ]);
+const Home = ({navigation}) => {
+  const dispatch = useDispatch();
+
+  const post = useSelector(state => state.user.status);
+  // console.log('post', post);
+
+  useEffect(() => {
+    dispatch(getStatusByUserInterestAction());
+  }, []);
 
   const renderItem = ({item}) => {
     // console.log(item);
-    return <PostCard name={item.name} status={item.status} />;
+    return (
+      <PostCard
+        name={item?.owner?.name}
+        status={item?.content}
+        navigation={navigation}
+        image={item?.owner?.avatar}
+        likeCount={item?.likeBy?.length}
+        commentCount={item?.comment?.length}
+        postCreated={item?.created_at}
+        statusId={item?.id}
+      />
+    );
   };
 
   return (
-    <View>
-      <Search />
+    <View style={{marginBottom: 130}}>
+      <Search navigation={navigation} />
       <FlatList
         data={post}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item._id}
       />
     </View>
   );

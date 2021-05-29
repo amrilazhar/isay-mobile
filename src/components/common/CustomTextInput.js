@@ -6,8 +6,12 @@ const CustomTextInput = props => {
   return (
     <View style={styles.container}>
       <TextInput
+        value={props.value}
+        onChangeText={props.onChangeText}
         style={styles.input}
-        placeholderTextColor={'black'}
+        placeholderTextColor={color.grey2}
+        placeholder={props.placeholder}
+        secureTextEntry={props.secureTextEntry}
         {...props}
       />
     </View>

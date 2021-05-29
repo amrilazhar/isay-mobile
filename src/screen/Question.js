@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, ScrollView} from 'react-native';
-import SearchLocation from '../components/common/SearchLocation';
+
 import CustomButton from '../components/common/CustomButton';
 import {color} from '../styles/color';
 
@@ -33,7 +33,7 @@ const Question = ({navigation}) => {
         <View style={styles.button}>
           <CustomButton
             title="Yes, get my Avatar"
-            onPressButton={() => navigation.navigate('FreeTimeQuestion')}
+            onPressButton={() => navigation.navigate('InputLocation')}
           />
         </View>
       </View>

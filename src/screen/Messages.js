@@ -1,12 +1,24 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, TextInput, View, Text, Image} from 'react-native';
 import {color} from '../styles/color';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Person from '../components/common/Person';
+import socketIOClient from 'socket.io-client';
+const ENDPOINT = 'https://isay.gabatch11.my.id/';
 
-const Messages = () => {
+const Messages = ({navigation}) => {
+  const [response, setResponse] = useState('');
+  console.log(response);
+  useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on('FromAPI', data => {
+      setResponse(data);
+      console.log(data);
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -22,7 +34,7 @@ const Messages = () => {
         <Entypo name="dots-three-horizontal" size={25} color={color.white} />
       </View>
 
-      <Person />
+      <Person navigation={navigation} />
     </View>
   );
 };

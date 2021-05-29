@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,10 +8,43 @@ import {
   Keyboard,
   ScrollView,
 } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../components/common/CustomButton';
 import CustomTextInput from '../components/common/CustomTextInput';
 
 const Register = ({navigation}) => {
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState(null);
+
+  const handleRegister = async () => {
+    try {
+      const {data} = await axios({
+        method: 'POST',
+        url: 'https://isay.gabatch11.my.id/user/signup',
+        data: {
+          email,
+          password,
+          confirmPassword,
+        },
+      });
+
+      console.log('run', data.data.token);
+      AsyncStorage.setItem('accessToken', data.data.token);
+
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+
+      alert('Check Your Email to Verify');
+      navigation.navigate('Login');
+    } catch (error) {
+      console.log('err', error);
+      alert('email or password not valid', error);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View style={styles.container}>
@@ -22,15 +55,29 @@ const Register = ({navigation}) => {
           />
         </View>
         <Text style={styles.email}>E-mail</Text>
-        <CustomTextInput />
+        <CustomTextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+        />
         <Text style={styles.password}>Create Password</Text>
-        <CustomTextInput />
+        <CustomTextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
         <Text style={styles.password}>Confirm your Password</Text>
-        <CustomTextInput />
+        <CustomTextInput
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholder="Confirm Password"
+          secureTextEntry
+        />
         <View style={styles.container1}>
           <CustomButton
             title="Create an Account"
-            onPressButton={() => navigation.navigate('InputLocation')}
+            onPressButton={() => handleRegister()}
           />
           <View style={styles.signUp}>
             <Text>Already have an account? </Text>

@@ -9,7 +9,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //Bottom Tab
 import Home from './Home';
-import Account from './Account';
+import Account from './MyProfile';
 import Notifications from './Notification';
 import Messages from './Messages';
 import Post from './Post';

@@ -1,11 +1,27 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, TextInput, Image} from 'react-native';
 import {color} from '../styles/color';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import socketIOClient from 'socket.io-client';
+const ENDPOINT = 'https://isay.gabatch11.my.id';
 
 const Chat = () => {
+  const [response, setResponse] = useState('');
+  console.log('response', response);
+
+  // const socketRef = useRef();
+
+  // useEffect(() => {
+  //   socketRef.current = socketIOClient(ENDPOINT, {
+  //     transports: ['websocket'],
+  //     path: '/socket',
+  //     upgrade: false,
+  //     query: {roomID: room},
+  //   });
+  // }, []);
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.header}>

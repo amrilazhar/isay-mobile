@@ -1,14 +1,14 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const Account = () => {
+const Activities = () => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Account Profile</Text>
+      <Text>Activities!</Text>
     </View>
   );
 };
 
-export default Account;
+export default Activities;
 
 const styles = StyleSheet.create({});

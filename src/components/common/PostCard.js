@@ -17,6 +17,7 @@ const PostCard = ({
   commentCount,
   postCreated,
   statusId,
+  ownerId,
 }) => {
   // console.log('ini jalan', name);
   // const navigation = useNavigation();
@@ -74,7 +75,7 @@ const PostCard = ({
           <Ionicons name="chatbubbles-outline" size={20} />
           <Text
             style={styles.text1}
-            onPress={() => navigation.navigate('Chat')}>
+            onPress={() => navigation.navigate('Chat', {receiver: ownerId})}>
             Personal chat
           </Text>
         </View>

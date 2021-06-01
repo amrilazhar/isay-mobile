@@ -1,9 +1,89 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {color} from '../../styles/color';
 import CustomPersonalButton from './CustomPersonalButton';
+import moment from 'moment';
 
-const NotificationCard = () => {
+const NotificationCard = ({navigation, dataNotif, socket}) => {
+  const timeCreated = moment(new Date(dataNotif.created_at)).fromNow();
+
+  if (socket !== undefined && dataNotif.readed === false) {
+    socket.emit('readNotif', {
+      notif_id: dataNotif._id,
+    });
+  }
+
+  const otherDoing = () => {
+    switch (dataNotif.type) {
+      case 'like_status':
+        return (
+          <View style={{width: '95%'}}>
+            <Text style={styles.text}>Like Your Post</Text>
+          </View>
+        );
+      case 'post_comment':
+        return (
+          <View style={{width: '95%'}}>
+            <Text style={styles.text}>Commented</Text>
+            <Text>{dataNotif.comment_id?.content}</Text>
+          </View>
+        );
+      default:
+        return (
+          <View style={{width: '95%'}}>
+            <Text style={styles.text}>....</Text>
+            <Text>....</Text>
+          </View>
+        );
+    }
+  };
+
+  const statusRelated = () => {
+    if (dataNotif.status_id) {
+      const statusTimeCreated = moment(
+        new Date(dataNotif.status_id.created_at),
+      ).fromNow();
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('StatusDetails', {statusId: dataNotif._id});
+          }}>
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: color.grey1,
+              borderRadius: 5,
+              paddingHorizontal: 10,
+              marginBottom: 10,
+            }}>
+            <View style={styles.container1}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View>
+                  <Image
+                    style={styles.logo}
+                    source={{uri: dataNotif.to.avatar}}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.name}>{dataNotif.to.name}</Text>
+                  <Text>{statusTimeCreated}</Text>
+                </View>
+              </View>
+              <View>
+                <CustomPersonalButton
+                  title={dataNotif.status_id.interest[0].interest}
+                />
+              </View>
+            </View>
+            <Text style={styles.textPost}>{dataNotif.status_id.content}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return <View></View>;
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -12,10 +92,7 @@ const NotificationCard = () => {
           marginBottom: 20,
         }}>
         <View>
-          <Image
-            style={styles.logo}
-            source={require('../../assets/Avatar1.png')}
-          />
+          <Image style={styles.logo} source={{uri: dataNotif.from.avatar}} />
         </View>
         <View>
           <View
@@ -25,48 +102,15 @@ const NotificationCard = () => {
               height: 22,
               width: 300,
             }}>
-            <Text style={styles.name}>Rfalesia Arnold</Text>
-            <Text>3h ago</Text>
+            <Text style={styles.name}>{dataNotif.from.name}</Text>
+            <Text>{timeCreated}</Text>
           </View>
-          <View style={{width: '95%'}}>
-            <Text style={styles.text}>Commented</Text>
-            <Text>“lorem ipsum dolor sit amet Lorem ipsum...”</Text>
-          </View>
+          {otherDoing()}
         </View>
       </View>
 
       {/* Marker commented */}
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: color.grey1,
-          borderRadius: 5,
-          paddingHorizontal: 10,
-          marginBottom: 10,
-        }}>
-        <View style={styles.container1}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View>
-              <Image
-                style={styles.logo}
-                source={require('../../assets/Avatar.png')}
-              />
-            </View>
-            <View>
-              <Text style={styles.name}>Anpanman</Text>
-              <Text>3h ago</Text>
-            </View>
-          </View>
-          <View>
-            <CustomPersonalButton title="Personal" />
-          </View>
-        </View>
-        <Text style={styles.textPost}>
-          this is your status for testing visualitation Lorem ipsum dolor sit
-          amet, consectetur adipiscing elit. Eu vitae turpis erat et faucibus
-          elit......
-        </Text>
-      </View>
+      {statusRelated()}
     </View>
   );
 };

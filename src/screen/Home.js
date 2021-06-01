@@ -32,6 +32,7 @@ const Home = ({navigation}) => {
         commentCount={item?.comment?.length}
         postCreated={item?.created_at}
         statusId={item?.id}
+        ownerId={item?.owner._id}
       />
     );
   };

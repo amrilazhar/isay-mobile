@@ -2,11 +2,13 @@ import * as types from '../constant/actionTypes';
 
 const initialState = {
   loading: false,
+  loadingNotif: true,
   userDetail: {},
   location: {},
   status: {},
   detailsStatus: {},
   allComments: {},
+  allNotification: [],
 };
 // console.log('location list1', initialState.location);
 // console.log('initialstateUserdetail', initialState.userDetail);
@@ -60,6 +62,21 @@ const userReducer = (state = initialState, action) => {
         error: action.error,
       });
 
+    case types.GET_ALL_NOTIFICATION_BEGIN:
+      return Object.assign(state, {
+        loadingNotif: true,
+        allNotification: [],
+      });
+    case types.GET_ALL_NOTIFICATION_SUCCESS:
+      return Object.assign(state, {
+        loadingNotif: false,
+        allNotification: action.payload,
+      });
+    case types.GET_ALL_NOTIFICATION_FAILURE:
+      return Object.assign(state, {
+        loadingNotif: false,
+        error: action.error,
+      });
     default:
       return state;
   }

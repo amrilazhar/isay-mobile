@@ -1,25 +1,23 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, Linking} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 import {color} from '../../styles/color';
 import moment from 'moment';
-import {useDispatch} from 'react-redux';
-import {getChatRoomAct} from '../../redux/action/Chat';
+import {chatConstant} from '../../redux/constant/chatTypes';
 
-const Person = ({navigation, item}) => {
-  const dispatch = useDispatch();
-  const timeCreated = moment(new Date(item.created_at)).fromNow();
-  const receiver =
-    item.from._id === item.chatOwner ? item.to._id : item.from._id;
-
+const MessageBox = ({navigation, item, receiver, socket}) => {
+  if (item.to._id != receiver && item.readed === false) {
+    socket.emit(chatConstant.SET_READ_STATUS_MESSAGE_EVENT, {
+      message_id: item._id,
+    });
+  }
   const displayMessageImageLink = link => {
     return (
-      <Text
-        style={{color: 'blue'}}
-        onPress={() => Linking.openURL(link)}>
-        {link.substring(0,20)}
-      </Text>
+      <View>
+        <Image style={styles.messageImage} source={{uri: link}} />
+      </View>
     );
   };
+  const timeCreated = moment(new Date(item.created_at)).fromNow();
 
   return (
     <View style={{padding: 10, flex: 1}}>
@@ -33,10 +31,7 @@ const Person = ({navigation, item}) => {
           <Image
             style={styles.logo}
             source={{
-              uri:
-                item.from._id === item.chatOwner
-                  ? item.to.avatar
-                  : item.from.avatar,
+              uri: item.from?.avatar,
             }}
           />
         </View>
@@ -49,22 +44,16 @@ const Person = ({navigation, item}) => {
               width: '75%',
             }}>
             <Text style={styles.name}>
-              {item.from._id === item.chatOwner ? item.to.name : item.from.name}
+              {item.to._id.toString() === receiver.toString()
+                ? 'You'
+                : item.from.name}
             </Text>
             <Text style={{textAlign: 'right'}}>{timeCreated}</Text>
           </View>
           <View style={{width: '75%'}}>
-            <Text
-              style={styles.text}
-              onPress={() => {
-                navigation.navigate('Chat', {receiver: receiver})
-                dispatch(getChatRoomAct(receiver));
-                }}>
-              {item.from._id === item.chatOwner
-                ? 'You : '
-                : `${item.from.name} : `}
+            <Text style={styles.text}>
               {item.message_type === 'text'
-                ? item.message.substring(0, 20) + '...'
+                ? item.message
                 : displayMessageImageLink(item.message)}
             </Text>
           </View>
@@ -74,12 +63,17 @@ const Person = ({navigation, item}) => {
   );
 };
 
-export default Person;
+export default MessageBox;
 
 const styles = StyleSheet.create({
   logo: {
     width: 65,
     height: 65,
+    marginRight: 10,
+  },
+  messageImage: {
+    width: 200,
+    height : 200,
     marginRight: 10,
   },
   name: {

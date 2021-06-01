@@ -15,9 +15,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Login = ({navigation}) => {
   // const dispatch = useDispatch();
 
-  const [email, setEmail] = useState('lisanewell76@gmail.com');
+  // const [email, setEmail] = useState('lisanewell76@gmail.com');
   const [password, setPassword] = useState('Aneh1234!!');
-
+  const [email, setEmail] = useState('user2@glintsmail.com');
+  
   const handleLogin = async () => {
     try {
       const {data} = await axios({

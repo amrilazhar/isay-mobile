@@ -120,3 +120,42 @@ export const getAllCommentAction = statusId => {
     }
   };
 };
+
+
+const getNotificationBegin = () => ({
+  type: types.GET_ALL_NOTIFICATION_BEGIN,
+  loadingNotif : true,
+  payload: [],
+});
+
+const getNotificationSuccess = notif => ({
+  type: types.GET_ALL_NOTIFICATION_SUCCESS,
+  loadingNotif : false,
+  payload: notif,
+});
+
+
+const getNotificationFailure = error => ({
+  type: types.GET_ALL_NOTIFICATION_FAILURE,
+  loadingNotif : false,
+  error,
+});
+
+export const getNotification = () => {
+  let url = 'https://isay.gabatch11.my.id/notif?page=1&limit=100';
+
+  return async dispatch => {
+    const token = await AsyncStorage.getItem('accessToken');
+    const AuthStr = 'Bearer '.concat(token);  
+    try {
+      dispatch(getNotificationBegin());
+      const response = await axios.get(url, {
+        headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
+      });
+      dispatch(getNotificationSuccess(response.data.data));
+    } catch (error) {
+      console.log('Error', error);
+      dispatch(getNotificationFailure(error));
+    }
+  };
+};

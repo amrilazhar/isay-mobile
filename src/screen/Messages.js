@@ -78,7 +78,7 @@ const Messages = props => {
       io.disconnect();
     };
   }, []);
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>

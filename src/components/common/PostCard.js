@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import CustomPersonalButton from './CustomPersonalButton';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -18,12 +18,11 @@ const PostCard = ({
   postCreated,
   statusId,
   ownerId,
+  userId,
 }) => {
-  // console.log('ini jalan', name);
-  // const navigation = useNavigation();
   const [isLike, setIsLike] = useState(false);
-  // console.log('postc', postCreated);
-  const timeCreated = moment(postCreated).startOf('day').fromNow();
+
+  const timeCreated = moment(new Date(postCreated)).fromNow();
 
   return (
     <View style={styles.container}>
@@ -46,7 +45,7 @@ const PostCard = ({
         <View>
           <CustomPersonalButton
             title="Personal"
-            onPressButton={() => navigation.navigate('UserProfile')}
+            onPressButton={() => navigation.navigate('UserProfile', {userId})}
           />
         </View>
       </View>

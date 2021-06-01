@@ -14,9 +14,10 @@ const Home = ({navigation}) => {
   const dispatch = useDispatch();
 
   const post = useSelector(state => state.user.status);
-  // console.log('post', post);
+  
 
   useEffect(() => {
+    // console.log('post',post);
     dispatch(getStatusByUserInterestAction());
   }, []);
 
@@ -33,6 +34,7 @@ const Home = ({navigation}) => {
         postCreated={item?.created_at}
         statusId={item?.id}
         ownerId={item?.owner._id}
+        userId={item?.owner?.id}
       />
     );
   };
@@ -43,7 +45,7 @@ const Home = ({navigation}) => {
       <FlatList
         data={post}
         renderItem={renderItem}
-        keyExtractor={item => item._id}
+        keyExtractor={item => item._id}          
       />
     </View>
   );

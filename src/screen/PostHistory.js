@@ -1,43 +1,43 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import PostCard from '../components/common/PostCard';
+import {getHistoryPostAction, getMyProfileAction} from '../redux/action/Action';
 
 const PostHistory = ({navigation}) => {
-  const [post, setPost] = useState([
-    {
-      id: 1,
-      name: 'Anpanman',
-      status:
-        'React Native combines the best parts of native development with React, a best-in-class JavaScript library for building user interfaces.',
-    },
-    {
-      id: 2,
-      name: 'Anpanman',
-      status:
-        'Many platforms, one React. Create platform-specific versions of components so a single codebase can share code across platforms. With React Native, one team can maintain two platforms and share a common technology—React.',
-    },
-    {
-      id: 3,
-      name: 'Anpanman',
-      status:
-        'Many platforms, one React. Create platform-specific versions of components so a single codebase can share code across platforms. With React Native, one team can maintain two platforms and share a common technology—React.',
-    },
-  ]);
+  const dispatch = useDispatch();
+  const historyPost = useSelector(state => state.user.historyPost);
+  const myProfile = useSelector(state => state.user.myProfile);
+  // console.log('historypost', historyPost);
+
+  useEffect(() => {
+    dispatch(getHistoryPostAction());
+    dispatch(getMyProfileAction());
+  }, []);
 
   const renderItem = ({item}) => {
     // console.log(item);
     return (
-      <PostCard name={item.name} status={item.status} navigation={navigation} />
+      <PostCard
+        likeCount={item?.likeBy?.length}
+        commentCount={item?.comment.length}
+        status={item?.content}
+        navigation={navigation}
+        statusId={item.id}
+        name={myProfile?.name}
+        image={myProfile?.avatar}
+        postCreated={item?.created_at}
+      />
     );
   };
 
   return (
     <View style={{flex: 1, marginBottom: 70}}>
       <FlatList
-        data={post}
+        data={historyPost}
         renderItem={renderItem}
         keyExtractor={item => item.id}
-      />
+       />
     </View>
   );
 };

@@ -1,20 +1,27 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {StyleSheet, TextInput, View, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {color} from '../../styles/color';
+import { getMyProfileAction } from '../../redux/action/Action';
 
 const Search = ({navigation}) => {
-  // const goBack = () => {
-  // navigation();
-  // };
+ 
+const dispatch = useDispatch();
+const myProfile = useSelector(state => state.user.myProfile);
 
+useEffect(() => {
+  dispatch(getMyProfileAction())
+}, [])
   return (
     <View style={styles.container}>
       <Image
         style={styles.tinyLogo}
-        source={require('../../assets/Avatar.png')}
+        source={{
+          uri: `${myProfile.avatar}`,
+        }}
       />
       <View style={styles.container1}>
         <Ionicons style={styles.ionicons} name="search" size={25} />

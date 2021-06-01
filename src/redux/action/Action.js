@@ -46,6 +46,56 @@ const getAllCommentFailure = error => ({
   error,
 });
 
+const getInterestSuccess = interest => ({
+  type: types.GET_INTEREST_SUCCESS,
+  payload: interest,
+});
+
+const getInterestFailure = error => ({
+  type: types.GET_INTEREST_FAILURE,
+  error,
+});
+
+const getMyProfileSuccess = myProfile => ({
+  type: types.GET_MY_PROFILE_SUCCESS,
+  payload: myProfile,
+});
+
+const getMyProfileFailure = error => ({
+  type: types.GET_MY_PROFILE_FAILURE,
+  error,
+});
+
+const getHistoryPostSuccess = historyPost => ({
+  type: types.GET_HISTORY_POST_SUCCESS,
+  payload: historyPost,
+});
+
+const getHistoryPostFailure = error => ({
+  type: types.GET_HISTORY_POST_FAILURE,
+  error,
+})
+
+const getAnotherProfileSuccess = anotherProfile => ({
+  type: types.GET_ANOTHER_PROFILE_SUCCESS,
+  payload: anotherProfile,
+});
+
+const getAnotherProfileFailure = error => ({
+  type: types.GET_ANOTHER_PROFILE_FAILURE,
+  error,
+});
+
+const getAnotherHistoryPostSuccess = AnotherHistoryPost => ({
+  type: types.GET_ANOTHER_HISTORY_POST_SUCCESS,
+  payload: AnotherHistoryPost,
+})
+
+const getAnotherHistoryPostFailure = error => ({
+  type: types.GET_ANOTHER_HISTORY_POST_FAILURE,
+  error,
+})
+
 export const getLocationAction = () => {
   let url = 'https://isay.gabatch11.my.id/utils/location';
   return async dispatch => {
@@ -113,10 +163,121 @@ export const getAllCommentAction = statusId => {
         headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
       });
       dispatch(getAllCommentSuccess(response.data));
-      console.log('allcomments', response.data);
+      // console.log('allcomments', response.data);
     } catch (error) {
       console.log('Error', error);
-      dispatch(getAllCommentSuccess({data:{comments:{}}}));
+      dispatch(getAllCommentSuccess({data: {comments: {}}}));
+    }
+  };
+};
+
+export const getInterestAction = () => {
+  let url = 'https://isay.gabatch11.my.id/utils/interest/topic';
+  return async dispatch => {
+    dispatch(getRequest());
+    try {
+      const response = await axios.get(url);
+      dispatch(getInterestSuccess(response.data.data));
+      // console.log(response.data.data);
+    } catch (error) {
+      console.log('Error', error);
+      dispatch(getInterestFailure(error));
+    }
+  };
+};
+
+export const getMyProfileAction = () => {
+  let url = 'https://isay.gabatch11.my.id/profile/getProfile';
+  return async dispatch => {
+    const token = await AsyncStorage.getItem('accessToken');
+    const AuthStr = 'Bearer '.concat(token);
+    dispatch(getRequest());
+    try {
+      const response = await axios.get(url, {
+        headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
+      });
+      dispatch(getMyProfileSuccess(response.data.data));
+    } catch (error) {
+      console.log('Error', error);
+      dispatch(getMyProfileFailure);
+    }
+  };
+};
+
+export const getHistoryPostAction = () => {
+  let url = 'https://isay.gabatch11.my.id/profile/Post';
+  return async dispatch => {
+    const token = await AsyncStorage.getItem('accessToken');
+    const AuthStr = 'Bearer '.concat(token);
+    dispatch(getRequest());
+    try {
+      const response = await axios.get(url, {
+        headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
+      });
+      dispatch(getHistoryPostSuccess(response.data.data.docs));
+      // console.log('result', response.data.data.docs);
+    } catch (error) {
+      console.log('Error', error);
+      dispatch(getHistoryPostFailure);
+    }
+  };
+}
+
+// export const posStatusActions = async (content, interest, media) => {
+//   let url = 'https://isay.gabatch11.my.id/status/';
+//   const token = await AsyncStorage.getItem('accessToken');
+//   const AuthStr = 'Bearer '.concat(token);
+//   try {
+//     const {data} = axios({
+//       method: 'POST',
+//       url: url,
+//       data: {
+//         content,
+//         interest,
+//         media,
+//       },
+//       headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
+//     });
+    
+//   } catch (error) {
+//     console.log('err', error);
+//   }
+// };
+
+export const getAnotherProfileAction = userId => {
+  let url = `https://isay.gabatch11.my.id/profile/an/${userId}`;
+  return async dispatch => {
+    const token = await AsyncStorage.getItem('accessToken');
+    const AuthStr = 'Bearer '.concat(token);
+    dispatch(getRequest());
+    try {
+      const response = await axios.get(url, {
+        headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
+      });
+      dispatch(getAnotherProfileSuccess(response.data.data));
+      
+    } catch (error) {
+      console.log('Error', error);
+      dispatch(getAnotherProfileFailure(error));
+    }
+  };
+};
+
+
+export const getAnotherHistoryPostAction = userId => {
+  let url = `https://isay.gabatch11.my.id/profile/an/Post/${userId}?page=1&limit=100`;
+  return async dispatch => {
+    const token = await AsyncStorage.getItem('accessToken');
+    const AuthStr = 'Bearer '.concat(token);
+    dispatch(getRequest());
+    try {
+      const response = await axios.get(url, {
+        headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
+      });
+      dispatch(getAnotherHistoryPostSuccess(response.data.data));
+    } catch (error) {
+      console.log('Error', error);
+      dispatch(getAnotherHistoryPostFailure(error));
     }
   };
 };

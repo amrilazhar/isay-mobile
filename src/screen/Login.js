@@ -32,7 +32,7 @@ const Login = ({navigation}) => {
         },
       });
 
-      // console.log('token', data.data.token);
+      console.log('token', data.data.token);
       AsyncStorage.setItem('accessToken', data.data.token);
 
       // setEmail('');

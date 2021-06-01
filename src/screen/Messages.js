@@ -6,19 +6,10 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Person from '../components/common/Person';
 import socketIOClient from 'socket.io-client';
-const ENDPOINT = 'https://isay.gabatch11.my.id/';
+
 
 const Messages = ({navigation}) => {
-  const [response, setResponse] = useState('');
-  console.log(response);
-  useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on('FromAPI', data => {
-      setResponse(data);
-      console.log(data);
-    });
-  }, []);
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>

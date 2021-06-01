@@ -1,10 +1,20 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {getMyProfileAction} from '../redux/action/Action';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import TopTabNavigator from '../components/common/TopTabNavigator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {color} from '../styles/color';
 
 const MyProfile = () => {
+const dispatch = useDispatch();
+const myProfile = useSelector(state => state.user.myProfile);
+
+
+useEffect(() => {
+  dispatch(getMyProfileAction());
+}, []);
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.header}>
@@ -15,14 +25,19 @@ const MyProfile = () => {
           style={styles.background}
           source={require('../assets/Square.png')}
         />
-        <Image style={styles.avatar} source={require('../assets/Avatar.png')} />
+        <Image
+          style={styles.avatar}
+          source={{
+            uri: `${myProfile.avatar}`,
+          }}
+        />
       </View>
-      <Text style={styles.textName}>Anpanman</Text>
+      <Text style={styles.textName}>{myProfile?.name}</Text>
       <View style={{flexDirection: 'row', marginLeft: 105}}>
         <Ionicons name="location" size={20} color={color.black} />
-        <Text style={styles.location}>Jakarta</Text>
+        <Text style={styles.location}>{myProfile?.location?.province}</Text>
       </View>
-      <TopTabNavigator />
+      <TopTabNavigator/>
     </View>
   );
 };
@@ -42,8 +57,8 @@ const styles = StyleSheet.create({
     height: 120,
   },
   avatar: {
-    height: 75,
-    width: 75,
+    height: 80,
+    width: 80,
     marginLeft: 20,
     borderWidth: 5,
     borderRadius: 50,

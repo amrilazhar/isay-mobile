@@ -1,14 +1,37 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getAnotherHistoryPostAction,
+  getAnotherProfileAction,
+  getStatusByUserInterestAction,
+} from '../redux/action/Action';
 import {color} from '../styles/color';
 import TabUserProfile from './TabUserProfile';
 
-const UserProfile = () => {
+const UserProfile = ({route, navigation}) => {
+  const {userId} = route.params;
+  const dispatch = useDispatch();
+  const anotherProfile = useSelector(state => state.user.anotherProfile);
+  const bio = anotherProfile?.bio;
+  // console.log('anotherProfile', anotherProfile.bio);
+
+  useEffect(() => {
+    dispatch(getAnotherProfileAction(userId));
+    dispatch(getAnotherHistoryPostAction(userId));
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.header}>
-        <Ionicons name="chevron-back" size={25} color={color.white} />
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(getStatusByUserInterestAction());
+            navigation.navigate('MainTab');
+          }}>
+          <Ionicons name="chevron-back" size={25} color={color.white} />
+        </TouchableOpacity>
       </View>
       <View>
         <Image
@@ -17,18 +40,25 @@ const UserProfile = () => {
         />
         <Image
           style={styles.avatar}
-          source={require('../assets/Avatar1.png')}
+          source={{
+            uri: `${anotherProfile.avatar}`,
+          }}
         />
       </View>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text style={styles.textName}>Black Swan</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Text style={styles.textName}>{anotherProfile.name}</Text>
         <TouchableOpacity style={styles.message}>
           <Text style={{color: color.white}}>Message</Text>
         </TouchableOpacity>
       </View>
       <View style={{flexDirection: 'row', marginLeft: 105}}>
         <Ionicons name="location" size={20} color={color.black} />
-        <Text style={styles.location}>Jakarta</Text>
+        <Text style={styles.location}>{anotherProfile?.location?.city}</Text>
       </View>
       <TabUserProfile />
     </View>

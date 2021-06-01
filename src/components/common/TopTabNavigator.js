@@ -9,6 +9,7 @@ import Activities from '../../screen/Activities';
 const Tab = createMaterialTopTabNavigator();
 
 const TopTabNavigator = () => {
+  
   return (
     <Tab.Navigator
       initialRouteName="Profile"

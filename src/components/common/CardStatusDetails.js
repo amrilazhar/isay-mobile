@@ -27,13 +27,10 @@ import {
   getStatusByUserInterestAction,
 } from '../../redux/action/Action';
 import {FlatList} from 'react-native-gesture-handler';
-// {
-//   statusId, navigation;
-// }
+
 const CardStatusDetails = ({statusId, navigation}) => {
   // post comment //
   const status_id = statusId;
-  // console.log('id', status_id);
   const [content, setContent] = useState('');
   // ========== //
   const dispatch = useDispatch();
@@ -48,7 +45,7 @@ const CardStatusDetails = ({statusId, navigation}) => {
     dispatch(getAllCommentAction(status_id));
   }, [postDetails]);
 
-  // console.log('comment list', comments);
+  // console.log('detailPost', postDetails);
 
   const addComment = async () => {
     const token = await AsyncStorage.getItem('accessToken');
@@ -106,9 +103,11 @@ const CardStatusDetails = ({statusId, navigation}) => {
   return (
     <View style={{flex: 1}}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={dispatch(getStatusByUserInterestAction())}
-          onPress={() => navigation.navigate('MainTab')}>
+        <TouchableOpacity         
+          onPress={() => {
+            dispatch(getStatusByUserInterestAction());
+            navigation.navigate('MainTab');
+          }}>
           <MaterialIcons name="arrow-back-ios" size={25} color={color.white} />
         </TouchableOpacity>
         <Entypo name="dots-three-horizontal" size={25} color={color.white} />

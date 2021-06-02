@@ -6,7 +6,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
-
+import {chatMessageAct, getChatRoomAct} from '../../redux/action/Chat';
 import {color} from '../../styles/color';
 import {
   getMyProfileAction,
@@ -126,7 +126,7 @@ const PostCard = ({
           <TouchableOpacity
             onPress={() => {
               dispatch(getStatusDetailsAction(statusId));
-              navigation.navigate('StatusDetails', {statusId});
+              navigation.navigate('StatusDetails', {statusId, category});
             }}>
             <Text style={styles.text1}>Comments {commentCount} </Text>
           </TouchableOpacity>
@@ -135,7 +135,11 @@ const PostCard = ({
           <Ionicons name="chatbubbles-outline" size={20} />
           <Text
             style={styles.text1}
-            onPress={() => navigation.navigate('Chat', {receiver: ownerId})}>
+            onPress={() => {
+              dispatch(getChatRoomAct(ownerId));
+              dispatch(chatMessageAct([]));
+              navigation.navigate('Chat', {receiver: ownerId});
+            }}>
             Personal chat
           </Text>
         </View>

@@ -8,7 +8,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 const StatusDetails = ({route, navigation}) => {
   const dispatch = useDispatch();
-  const {statusId} = route.params;
+  const {statusId, category} = route.params;
+  
 
   // const comments = useSelector(state => state.user.allComments);
 
@@ -18,7 +19,7 @@ const StatusDetails = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <CardStatusDetails statusId={statusId} navigation={navigation} />
+      <CardStatusDetails statusId={statusId} navigation={navigation} category={category} />
     </View>
   );
 };

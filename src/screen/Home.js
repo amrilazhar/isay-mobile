@@ -24,7 +24,7 @@ const Home = ({navigation}) => {
   
   
   useEffect(() => {
-    console.log('post', post);
+    console.log('Home 39');
     dispatch(getStatusByUserInterestAction());
     dispatch(getMyProfileAction())
   }, []);

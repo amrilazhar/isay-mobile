@@ -11,6 +11,7 @@ import {color} from '../../styles/color';
 import {
   getMyProfileAction,
   getStatusByUserInterestAction,
+  getStatusDetailsAction,
 } from '../../redux/action/Action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -36,7 +37,7 @@ const PostCard = ({
   const myId = myProfile.id;
 
   useEffect(() => {
-    console.log('mediaimage', media);
+    console.log('postcardJSline 39');
     dispatch(getMyProfileAction());
     dispatch(getStatusByUserInterestAction());
   }, []);
@@ -52,7 +53,7 @@ const PostCard = ({
       headers: {Authorization: AuthStr},
     })
       .then(({data}) => {
-        console.log('markerdata', data);
+        // console.log('markerdata', data);
         dispatch(getStatusByUserInterestAction());
         // success handling
       })
@@ -74,20 +75,19 @@ const PostCard = ({
             />
           </View>
           <View>
-            <Text style={styles.name}>{name}</Text>
-
-            <Text>{timeCreated}</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('UserProfile', {userId})}>
+              <Text style={styles.name}>{name}</Text>
+              <Text>{timeCreated}</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View>
-          <CustomPersonalButton
-            title={category}
-            onPressButton={() => navigation.navigate('UserProfile', {userId})}
-          />
+          <CustomPersonalButton title={category} />
         </View>
       </View>
       <Text style={styles.textPost}>{status}</Text>
-      <View style={{flexDirection:'row', justifyContent:'flex-start'}}>
+      <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
         {media.map(item => {
           return (
             <View>
@@ -123,11 +123,13 @@ const PostCard = ({
         </View>
         <View style={styles.response2}>
           <Ionicons name="chatbubble-ellipses-outline" size={20} />
-          <Text
-            onPress={() => navigation.navigate('StatusDetails', {statusId})}
-            style={styles.text1}>
-            Comments {commentCount}{' '}
-          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(getStatusDetailsAction(statusId));
+              navigation.navigate('StatusDetails', {statusId});
+            }}>
+            <Text style={styles.text1}>Comments {commentCount} </Text>
+          </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Ionicons name="chatbubbles-outline" size={20} />
@@ -202,9 +204,9 @@ const styles = StyleSheet.create({
     borderColor: color.grey1,
   },
   imageContent: {
-    width: 100,
+    width: 130,
     marginTop: 5,
-    height: 200,
+    height: 130,
     marginRight: 10,
   },
 });

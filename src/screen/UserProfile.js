@@ -18,6 +18,7 @@ const UserProfile = ({route, navigation}) => {
   // console.log('anotherProfile', anotherProfile.bio);
 
   useEffect(() => {
+    console.log('user Profile 21');
     dispatch(getAnotherProfileAction(userId));
     dispatch(getAnotherHistoryPostAction(userId));
   }, []);

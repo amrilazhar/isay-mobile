@@ -37,17 +37,18 @@ const CardStatusDetails = ({statusId, navigation}) => {
   const dispatch = useDispatch();
 
   const postDetails = useSelector(state => state.user.detailsStatus);
-
+  const loading = useSelector(state => state.user.loading)
   const timeCreated = moment(new Date(postDetails.created_at)).fromNow();
   const comments = useSelector(state => state.user.allComments);
 
   
   useEffect(() => {
-    console.log('postdetails',postDetails);
+    // console.log('postdetails',postDetails);
+    
     dispatch(getAllCommentAction(status_id));
   }, []);
 
-  // console.log('detailPost', postDetails);
+  
 
   const addComment = async () => {
     const token = await AsyncStorage.getItem('accessToken');
@@ -104,90 +105,110 @@ const CardStatusDetails = ({statusId, navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <View style={styles.header}>
-        <TouchableOpacity         
-          onPress={() => {
-            dispatch(getStatusByUserInterestAction());
-            navigation.navigate('MainTab');
-          }}>
-          <MaterialIcons name="arrow-back-ios" size={25} color={color.white} />
-        </TouchableOpacity>
-        <Entypo name="dots-three-horizontal" size={25} color={color.white} />
-      </View>
-      <View style={styles.container}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View>
-              <Image
-                style={styles.logo}
-                source={{
-                  uri: `${postDetails?.owner?.avatar}`,
-                }}
+      {loading ? (
+        <Text> loading </Text>
+      ) : (
+        <View>
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(getStatusByUserInterestAction());
+                navigation.navigate('MainTab');
+              }}>
+              <MaterialIcons
+                name="arrow-back-ios"
+                size={25}
+                color={color.white}
               />
-            </View>
-            <View>
-              <Text style={styles.name}>{postDetails?.owner?.name}</Text>
-              <Text>{timeCreated}</Text>
-            </View>
-          </View>
-          <View>
-            <CustomPersonalButton title={postDetails?.interest[0]?.interest} />
-          </View>
-        </View>
-        <ScrollView
-          style={{
-            height: 110,
-            borderWidth: 1,
-            borderColor: color.grey1,
-            marginTop: 0,
-            paddingHorizontal: 5,
-          }}>
-          <Text style={styles.textPost}>{postDetails.content}</Text>
-        </ScrollView>
-
-        <View style={styles.style1}>
-          <View style={styles.style2}>
-            <AntDesign name="like2" size={20} />
-            <Text>Like {postDetails?.likeBy?.length} </Text>
-          </View>
-          <View style={styles.style3}>
-            <Ionicons name="chatbubble-ellipses-outline" size={20} />
-            <Text>Comments {postDetails?.comment?.length}</Text>
-          </View>
-          <View style={styles.style4}>
-            <Ionicons name="chatbubbles-outline" size={20} />
-            <Text>Personal chat </Text>
-          </View>
-        </View>
-        <View style={styles.load}>
-          <Text style={styles.loadMore}>Comments</Text>
-        </View>
-
-        <View style={{height: 320}}>{displayComments()}</View>
-      </View>
-      <View style={{justifyContent: 'flex-end', flex: 1}}>
-        <View style={styles.postComment}>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor={color.grey1}
-            placeholder={'Type Your Comment'}
-            onChangeText={setContent}
-            value={content}
-          />
-          <TouchableOpacity onPress={addComment}>
-            <MaterialCommunityIcons
-              name="send-circle"
-              size={40}
-              color={color.blue2}
+            </TouchableOpacity>
+            <Entypo
+              name="dots-three-horizontal"
+              size={25}
+              color={color.white}
             />
-          </TouchableOpacity>
+          </View>
+          <View style={styles.container}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View>
+                  <Image
+                    style={styles.logo}
+                    source={{
+                      uri: `${postDetails?.owner?.avatar}`,
+                    }}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.name}>{postDetails?.owner?.name}</Text>
+                  <Text>{timeCreated}</Text>
+                </View>
+              </View>
+              <View>
+                <CustomPersonalButton
+                  title={
+                    postDetails?.interest[0].interest
+                      ? postDetails.interest[0].interest
+                      : 'waiting..'
+                  }
+                />
+              </View>
+            </View>
+            <ScrollView
+              style={{
+                height: 110,
+                borderWidth: 1,
+                borderColor: color.grey1,
+                marginTop: 0,
+                paddingHorizontal: 5,
+              }}>
+              <Text style={styles.textPost}>{postDetails.content}</Text>
+            </ScrollView>
+
+            <View style={styles.style1}>
+              <View style={styles.style2}>
+                <AntDesign name="like2" size={20} />
+                <Text>Like {postDetails?.likeBy?.length} </Text>
+              </View>
+              <View style={styles.style3}>
+                <Ionicons name="chatbubble-ellipses-outline" size={20} />
+                <Text>Comments {postDetails?.comment?.length}</Text>
+              </View>
+              <View style={styles.style4}>
+                <Ionicons name="chatbubbles-outline" size={20} />
+                <Text>Personal chat </Text>
+              </View>
+            </View>
+            <View style={styles.load}>
+              <Text style={styles.loadMore}>Comments</Text>
+            </View>
+
+            <View style={{height: 320}}>{displayComments()}</View>
+          </View>
+          <View style={{justifyContent: 'flex-end', flex: 1}}>
+            <View style={styles.postComment}>
+              <TextInput
+                style={styles.input}
+                placeholderTextColor={color.grey1}
+                placeholder={'Type Your Comment'}
+                onChangeText={setContent}
+                value={content}
+              />
+              <TouchableOpacity onPress={addComment}>
+                <MaterialCommunityIcons
+                  name="send-circle"
+                  size={40}
+                  color={color.blue2}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 };

@@ -87,6 +87,7 @@ const Messages = props => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
+            console.log('Messages.js line 90');
             dispatch(getStatusByUserInterestAction());
             props.navigation.navigate('Home');            
           }}>

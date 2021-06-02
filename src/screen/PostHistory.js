@@ -19,7 +19,7 @@ const PostHistory = ({navigation}) => {
     // console.log(item);
     return (
       <PostCard
-        likeCount={item?.likeBy?.length}
+        likeCount={item?.likeBy}
         commentCount={item?.comment.length}
         status={item?.content}
         navigation={navigation}

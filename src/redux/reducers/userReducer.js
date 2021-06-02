@@ -3,6 +3,7 @@ import * as types from '../constant/actionTypes';
 const initialState = {
   loading: false,
   loadingNotif: true,
+  loadingCountNotif: true,
   userDetail: {},
   location: {},
   status: {},
@@ -14,6 +15,7 @@ const initialState = {
   historyPost: {},
   anotherHistoryPost: {},
   anotherProfile: {},
+  notifCount: [0,0],
 };
 // console.log('location list1', initialState.location);
 // console.log('initialstateUserdetail', initialState.userDetail);
@@ -125,6 +127,17 @@ const userReducer = (state = initialState, action) => {
     case types.GET_ALL_NOTIFICATION_FAILURE:
       return Object.assign(state, {
         loadingNotif: false,
+        error: action.error,
+      });
+    case types.GET_ALL_NOTIFICATION_COUNT_SUCCESS:
+      return Object.assign(state, {
+        loadingCountNotif: false,
+        notifCount: [action.payload.chatCount,action.payload.notifCount],
+      });
+    case types.GET_ALL_NOTIFICATION_COUNT_FAILURE:
+      return Object.assign(state, {
+        loadingCountNotif: false,
+        notifCount : [0,0],
         error: action.error,
       });
     default:

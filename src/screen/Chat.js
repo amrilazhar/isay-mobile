@@ -48,19 +48,21 @@ const Chat = ({route, navigation}) => {
 
   const openImagePicker = () => {
     ImagePicker.openPicker({
-      mediaType : 'photo',
+      mediaType: 'photo',
       includeBase64: true,
-    }).then(image => {
-      sendImages([`data:${image.mime};base64,${image.data}`]);
-    }).catch(err=>{
-      console.log(err);
-    });
+    })
+      .then(image => {
+        sendImages([`data:${image.mime};base64,${image.data}`]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
   const handleNewMessageChange = text => {
     setNewMessage(text);
   };
 
-    const handleSendMessage = () => {
+  const handleSendMessage = () => {
     if (newImages.length > 0) {
       sendImages(newImages);
       setNewImages([]);
@@ -86,27 +88,38 @@ const Chat = ({route, navigation}) => {
         upgrade: false,
         query: {roomID: room},
       });
-      socketRef.current.emit('connectAs', 'im connected to room');
 
       // Listens for incoming messages
+      socketRef.current.off(chatConstant.NEW_CHAT_MESSAGE_FROM_SERVER);
       socketRef.current.on(
         chatConstant.NEW_CHAT_MESSAGE_FROM_SERVER,
         newMessage => {
+          let checker = false;
           newMessage.receiver = receiver;
-
-          // combine old message and new message
-          dispatch(
-            chatMessageAct([
-              ...store.getState().setChatMessage.message,
-              newMessage,
-            ]),
-          );
+          store.getState().setChatMessage.message.forEach(item => {
+            if (item._id == newMessage._id) {
+              checker = true;
+            }
+          });
+          if (!checker) {
+            // combine old message and new message
+            dispatch(
+              chatMessageAct([
+                ...store.getState().setChatMessage.message,
+                newMessage,
+              ]),
+            );
+          }
         },
       );
+      socketRef.current.removeAllListeners('online:' + receiver);
       socketRef.current.on('online:' + receiver, status =>
         setReceiverOnlineStatus(status),
       );
       // Listens for update in read status of messages
+      socketRef.current.removeAllListeners(
+        chatConstant.UPDATED_READ_STATUS_MESSAGE_EVENT,
+      );
       socketRef.current.on(
         chatConstant.UPDATED_READ_STATUS_MESSAGE_EVENT,
         newMessageID => {
@@ -209,7 +222,7 @@ const Chat = ({route, navigation}) => {
   const renderChat = ({item}) => {
     return (
       <MessageBox
-        key={`room-list-${item._id}`}
+        key={`message-box-list-${item._id}`}
         navigation={navigation}
         item={item}
         receiver={receiver}
@@ -220,14 +233,13 @@ const Chat = ({route, navigation}) => {
 
   const displayChat = () => {
     let invertedMessage = [...chatHistory.message, ...chatMessage];
-    invertedMessage.reverse();
     return (
       <FlatList
         style={{height: '70%'}}
         inverted
-        data={invertedMessage}
+        data={invertedMessage.reverse()}
         renderItem={renderChat}
-        keyExtractor={item => `message-item-${item._id}`}
+        keyExtractor={item => 'chat-item-' + item._id}
       />
     );
   };
@@ -252,9 +264,9 @@ const Chat = ({route, navigation}) => {
     };
   }, []);
 
-  const loadAllDisplay = ()=>{
+  const loadAllDisplay = () => {
     if (room.loading) {
-      return displayLoading()
+      return displayLoading();
     } else {
       startServer(room.roomData._id);
       if (chatHistory.loading) {
@@ -263,14 +275,19 @@ const Chat = ({route, navigation}) => {
         return [displayChatName(), displayChat()];
       }
     }
-  }
+  };
 
   return (
     <View style={{flex: 1}}>
       {loadAllDisplay()}
       <View style={{justifyContent: 'flex-end', flex: 1}}>
         <View style={styles.postComment}>
-          <Feather name="image" size={25} color={color.grey4} onPress={()=> openImagePicker()}/>
+          <Feather
+            name="image"
+            size={25}
+            color={color.grey4}
+            onPress={() => openImagePicker()}
+          />
           <TextInput
             style={styles.input}
             placeholderTextColor={color.grey1}

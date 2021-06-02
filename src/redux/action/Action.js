@@ -114,6 +114,16 @@ const getNotificationFailure = error => ({
   error,
 });
 
+const getNotificationCountSuccess = data => ({
+  type: types.GET_ALL_NOTIFICATION_COUNT_SUCCESS,
+  payload: data,
+});
+
+const getNotificationCountFailure = error => ({
+  type: types.GET_ALL_NOTIFICATION_COUNT_FAILURE,
+  error,
+});
+
 
 export const getLocationAction = () => {
   let url = 'https://isay.gabatch11.my.id/utils/location';
@@ -319,6 +329,20 @@ export const getAnotherHistoryPostAction = userId => {
   };
 };
 
+export const getNotificationCount = () => {
+  let url = 'https://isay.gabatch11.my.id/notif/unreadNotif';
 
-
-
+  return async dispatch => {
+    const token = await AsyncStorage.getItem('accessToken');
+    const AuthStr = 'Bearer '.concat(token);  
+    try {
+      const response = await axios.get(url, {
+        headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
+      });
+      dispatch(getNotificationCountSuccess(response.data));
+    } catch (error) {
+      console.log('Error', error);
+      dispatch(getNotificationCountFailure(error));
+    }
+  };
+};

@@ -6,6 +6,7 @@ import {chatConstant} from '../../redux/constant/chatTypes';
 
 const MessageBox = ({navigation, item, receiver, socket}) => {
   if (item.to._id != receiver && item.readed === false) {
+    item.readed = true;
     socket.emit(chatConstant.SET_READ_STATUS_MESSAGE_EVENT, {
       message_id: item._id,
     });

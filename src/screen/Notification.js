@@ -15,7 +15,10 @@ import {getNotification} from '../redux/action/Action';
 import socketIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
-import {getStatusByUserInterestAction} from '../redux/action/Action';
+import {
+  getStatusByUserInterestAction,
+  getNotificationCount,
+} from '../redux/action/Action';
 
 const ENDPOINT = 'https://isay.gabatch11.my.id/';
 
@@ -25,7 +28,7 @@ const Notification = ({navigation}) => {
   const loading = useSelector(state => state.user.loadingNotif);
   const notifList = useSelector(state => state.user.allNotification);
 
-  const socketRef = useRef();
+  const socketRefNotif = useRef();
 
   const changeNotifList = dataNotif => {
     dispatch(getNotification());
@@ -37,7 +40,7 @@ const Notification = ({navigation}) => {
         key={`notif-list-${item._id}`}
         navigation={navigation}
         dataNotif={item}
-        socket={socketRef.current}
+        socket={socketRefNotif.current}
       />
     );
   };
@@ -54,21 +57,19 @@ const Notification = ({navigation}) => {
     }
   };
 
-  const displayLoading = ()=>{
+  const displayLoading = () => {
     return (
       <View style={[styles.loadContainer, styles.loadHorizontal]}>
         <ActivityIndicator size="large" color={color.blue1} />
       </View>
     );
-  }
-
-  
+  };
 
   useEffect(() => {
     dispatch(getNotification());
-    
-    if (socketRef.current === undefined) {
-      socketRef.current = socketIOClient(ENDPOINT, {
+
+    if (socketRefNotif.current === undefined) {
+      socketRefNotif.current = socketIOClient(ENDPOINT, {
         transports: ['websocket'],
         path: '/socket',
         upgrade: false,
@@ -78,11 +79,11 @@ const Notification = ({navigation}) => {
         let decodedToken = jwt_decode(token);
 
         // Listens for incoming messages
-        socketRef.current.removeAllListeners('chat:' + decodedToken.profile);
-        socketRef.current.on('notif:' + decodedToken.profile, changeNotifList);
+        socketRefNotif.current.removeAllListeners('chat:' + decodedToken.profile);
+        socketRefNotif.current.on('notif:' + decodedToken.profile, changeNotifList);
       });
       return () => {
-        socketRef.current.disconnect();
+        socketRefNotif.current.disconnect();
       };
     }
   }, []);
@@ -92,8 +93,9 @@ const Notification = ({navigation}) => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-          navigation.navigate('Home');
+            navigation.navigate('Home');
             dispatch(getStatusByUserInterestAction());
+            dispatch(getNotificationCount());
           }}>
           <MaterialIcons name="arrow-back-ios" size={25} color={color.white} />
         </TouchableOpacity>
@@ -122,11 +124,11 @@ const styles = StyleSheet.create({
   },
   loadContainer: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   loadHorizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
   },
 });

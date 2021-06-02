@@ -96,6 +96,25 @@ const getAnotherHistoryPostFailure = error => ({
   error,
 })
 
+const getNotificationBegin = () => ({
+  type: types.GET_ALL_NOTIFICATION_BEGIN,
+  loadingNotif: true,
+  payload: [],
+});
+
+const getNotificationSuccess = notif => ({
+  type: types.GET_ALL_NOTIFICATION_SUCCESS,
+  loadingNotif: false,
+  payload: notif,
+});
+
+const getNotificationFailure = error => ({
+  type: types.GET_ALL_NOTIFICATION_FAILURE,
+  loadingNotif: false,
+  error,
+});
+
+
 export const getLocationAction = () => {
   let url = 'https://isay.gabatch11.my.id/utils/location';
   return async dispatch => {
@@ -263,25 +282,6 @@ export const getAnotherProfileAction = userId => {
   };
 };
 
-const getNotificationBegin = () => ({
-  type: types.GET_ALL_NOTIFICATION_BEGIN,
-  loadingNotif : true,
-  payload: [],
-});
-
-const getNotificationSuccess = notif => ({
-  type: types.GET_ALL_NOTIFICATION_SUCCESS,
-  loadingNotif : false,
-  payload: notif,
-});
-
-
-const getNotificationFailure = error => ({
-  type: types.GET_ALL_NOTIFICATION_FAILURE,
-  loadingNotif : false,
-  error,
-});
-
 export const getNotification = () => {
   let url = 'https://isay.gabatch11.my.id/notif?page=1&limit=100';
 
@@ -300,3 +300,25 @@ export const getNotification = () => {
     }
   };
 };
+
+export const getAnotherHistoryPostAction = userId => {
+  let url = `https://isay.gabatch11.my.id/profile/an/Post/${userId}?page=1&limit=50`;
+  return async dispatch => {
+    const token = await AsyncStorage.getItem('accessToken');
+    const AuthStr = 'Bearer '.concat(token);
+    dispatch(getRequest());
+    try {
+      const response = await axios.get(url, {
+        headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
+      });
+      dispatch(getAnotherHistoryPostSuccess(response.data.data));
+    } catch (error) {
+      console.log('Error', error);
+      dispatch(getAnotherHistoryPostFailure(error));
+    }
+  };
+};
+
+
+
+

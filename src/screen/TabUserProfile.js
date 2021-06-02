@@ -71,7 +71,7 @@ const Profile = () => {
 const PostHistory = ({navigation}) => {
   const anotherHistoryPost = useSelector(state => state.user.anotherHistoryPost);
 
-  console.log('hisPostAn', anotherHistoryPost);
+  // console.log('hisPostAn', anotherHistoryPost);
 
 
 

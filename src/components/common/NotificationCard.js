@@ -8,6 +8,7 @@ const NotificationCard = ({navigation, dataNotif, socket}) => {
   const timeCreated = moment(new Date(dataNotif.created_at)).fromNow();
 
   if (socket !== undefined && dataNotif.readed === false) {
+    dataNotif.readed = true;
     socket.emit('readNotif', {
       notif_id: dataNotif._id,
     });

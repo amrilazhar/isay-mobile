@@ -49,7 +49,9 @@ const MessageBox = ({navigation, item, receiver, socket}) => {
                 ? 'You'
                 : item.from.name}
             </Text>
-            <Text style={{textAlign: 'right'}}>{timeCreated}</Text>
+            <Text style={{textAlign: 'right', marginRight: '10%', color:color.grey4}}>
+              {timeCreated}
+            </Text>
           </View>
           <View style={{width: '75%'}}>
             <Text style={styles.text}>
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
   },
   messageImage: {
     width: 200,
-    height : 200,
+    height: 200,
     marginRight: 10,
   },
   name: {

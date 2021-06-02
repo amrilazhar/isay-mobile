@@ -73,8 +73,6 @@ const PostHistory = ({navigation}) => {
 
   // console.log('hisPostAn', anotherHistoryPost);
 
-
-
   const renderItem = ({item}) => {
     
     return (
@@ -83,11 +81,13 @@ const PostHistory = ({navigation}) => {
         status={item?.content}
         navigation={navigation}
         image={item?.owner?.avatar}
-        likeCount={item?.likeBy?.length}
+        likeCount={item?.likeBy}
         commentCount={item?.comment?.length}
         postCreated={item?.created_at}
         statusId={item?.id}
         userId={item?.owner?.id}
+        category={item?.interest[0]?.interest}
+        media={item?.media}
       />
     );
   };

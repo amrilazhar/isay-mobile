@@ -15,10 +15,9 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(getMyProfileAction());
-  }, []);
+  }, [myProfile]);
 
   const renderItem = ({item}) => {
-   
     return <CustomPersonalButton title={item.interest} />;
   };
 

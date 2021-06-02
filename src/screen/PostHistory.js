@@ -8,12 +8,12 @@ const PostHistory = ({navigation}) => {
   const dispatch = useDispatch();
   const historyPost = useSelector(state => state.user.historyPost);
   const myProfile = useSelector(state => state.user.myProfile);
-  // console.log('historypost', historyPost);
-
+  
   useEffect(() => {
+    // console.log('historypost', historyPost);
     dispatch(getHistoryPostAction());
     dispatch(getMyProfileAction());
-  }, []);
+  }, [historyPost]);
 
   const renderItem = ({item}) => {
     // console.log(item);
@@ -27,6 +27,9 @@ const PostHistory = ({navigation}) => {
         name={myProfile?.name}
         image={myProfile?.avatar}
         postCreated={item?.created_at}
+        category={item.interest[0].interest}
+        userId={item?.owner?.id}
+        media={item?.media}
       />
     );
   };

@@ -233,7 +233,7 @@ export const getMyProfileAction = () => {
 };
 
 export const getHistoryPostAction = () => {
-  let url = 'https://isay.gabatch11.my.id/profile/Post';
+  let url = 'https://isay.gabatch11.my.id/status/users/?page=1&limit=50';
   return async dispatch => {
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
@@ -242,7 +242,7 @@ export const getHistoryPostAction = () => {
       const response = await axios.get(url, {
         headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
       });
-      dispatch(getHistoryPostSuccess(response.data.data.docs));
+      dispatch(getHistoryPostSuccess(response.data.data));
       // console.log('result', response.data.data.docs);
     } catch (error) {
       console.log('Error', error);

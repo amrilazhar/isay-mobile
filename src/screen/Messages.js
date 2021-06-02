@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Text,
 } from 'react-native';
 import {color} from '../styles/color';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -93,14 +94,15 @@ const Messages = props => {
         </TouchableOpacity>
 
         <View style={styles.container1}>
-          <Ionicons style={styles.ionicons} name="search" size={25} />
+          <Text style={styles.message}>Messages</Text>
+          {/* <Ionicons style={styles.ionicons} name="search" size={25} />
           <TextInput
             style={styles.input}
             placeholderTextColor={color.grey1}
             placeholder={'Search annonymous'}
-          />
+          /> */}
         </View>
-        <Entypo name="dots-three-horizontal" size={25} color={color.white} />
+        {/* <Entypo name="dots-three-horizontal" size={25} color={color.white} /> */}
       </View>
       {displayRoomList()}
     </View>
@@ -123,16 +125,12 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: color.blue2,
-    height: 65,
+    justifyContent: 'flex-start',
+    backgroundColor: color.blue1,
+    height: 55,
     padding: 10,
   },
   container1: {
-    borderWidth: 1,
-    borderColor: color.grey2,
-    borderRadius: 5,
-    backgroundColor: color.white,
     alignItems: 'center',
     flexDirection: 'row',
   },
@@ -145,5 +143,11 @@ const styles = StyleSheet.create({
     color: color.black,
     paddingLeft: 10,
     width: '72%',
+  },
+  message: {
+    color: color.white,
+    marginLeft:'48%',
+    // fontWeight: 'bold',
+    fontSize: 18,
   },
 });

@@ -25,6 +25,7 @@ import axios from 'axios';
 import {
   getAllCommentAction,
   getStatusByUserInterestAction,
+  getStatusDetailsAction,
 } from '../../redux/action/Action';
 import {FlatList} from 'react-native-gesture-handler';
 
@@ -37,13 +38,14 @@ const CardStatusDetails = ({statusId, navigation}) => {
 
   const postDetails = useSelector(state => state.user.detailsStatus);
 
-  const timeCreated = moment(postDetails.created_at).startOf('day').fromNow();
-
+  const timeCreated = moment(new Date(postDetails.created_at)).fromNow();
   const comments = useSelector(state => state.user.allComments);
 
+  
   useEffect(() => {
+    console.log('postdetails',postDetails);
     dispatch(getAllCommentAction(status_id));
-  }, [postDetails]);
+  }, []);
 
   // console.log('detailPost', postDetails);
 
@@ -134,7 +136,7 @@ const CardStatusDetails = ({statusId, navigation}) => {
             </View>
           </View>
           <View>
-            <CustomPersonalButton title="Personal" />
+            <CustomPersonalButton title={postDetails?.interest[0]?.interest} />
           </View>
         </View>
         <ScrollView

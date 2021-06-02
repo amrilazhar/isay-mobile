@@ -213,7 +213,6 @@ const Chat = ({route, navigation}) => {
                 : 'Off'}
             </Text>
           </View>
-          <Entypo name="dots-three-horizontal" size={25} color={color.white} />
         </View>
       );
     } else return <Text></Text>;
@@ -314,7 +313,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: color.blue2,
+    backgroundColor: color.blue1,
     height: 65,
     padding: 20,
   },
@@ -330,10 +329,11 @@ const styles = StyleSheet.create({
   input: {
     color: 'white',
     color: color.black,
-    width: '85%',
+    width: '80%',
     borderWidth: 1,
     borderRadius: 50,
     borderColor: color.grey2,
+    marginLeft:10
   },
   logo: {
     width: 45,

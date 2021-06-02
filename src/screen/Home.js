@@ -22,7 +22,9 @@ const Home = ({navigation}) => {
   const [textInput, setTextInput] = useState('');
   const show= [];
   
+  
   useEffect(() => {
+    console.log('post', post);
     dispatch(getStatusByUserInterestAction());
     dispatch(getMyProfileAction())
   }, []);
@@ -42,6 +44,7 @@ const Home = ({navigation}) => {
         ownerId={item?.owner._id}
         userId={item?.owner?.id}
         category={item.interest[0].interest}
+        media={item.media}
       />
     );
   };

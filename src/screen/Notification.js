@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: 'flex-start',
     padding: 15,
-    backgroundColor: color.blue2,
+    backgroundColor: color.blue1,
     height: 55,
   },
   textHeader: {

@@ -8,7 +8,10 @@ import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 
 import {color} from '../../styles/color';
-import {getMyProfileAction, getStatusByUserInterestAction} from '../../redux/action/Action';
+import {
+  getMyProfileAction,
+  getStatusByUserInterestAction,
+} from '../../redux/action/Action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -24,6 +27,7 @@ const PostCard = ({
   ownerId,
   userId,
   category,
+  media,
 }) => {
   const dispatch = useDispatch();
   const [isLike, setIsLike] = useState(false);
@@ -32,6 +36,7 @@ const PostCard = ({
   const myId = myProfile.id;
 
   useEffect(() => {
+    console.log('mediaimage', media);
     dispatch(getMyProfileAction());
     dispatch(getStatusByUserInterestAction());
   }, []);
@@ -39,24 +44,23 @@ const PostCard = ({
   const handleLike = async () => {
     let url = `https://isay.gabatch11.my.id/status/like/${statusId}`;
     console.log('statusId', statusId);
-    const  token  = await AsyncStorage.getItem('accessToken');
+    const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
-      axios({
-        method: 'PUT',
-        url: url,
-        headers: {Authorization: AuthStr},
+    axios({
+      method: 'PUT',
+      url: url,
+      headers: {Authorization: AuthStr},
+    })
+      .then(({data}) => {
+        console.log('markerdata', data);
+        dispatch(getStatusByUserInterestAction());
+        // success handling
       })
-        .then(({data}) => {
-          console.log('markerdata', data);
-          dispatch(getStatusByUserInterestAction());
-          // success handling
-        })
-        .catch(err => {
-          console.log('Error',err.message);
-          // erro handling
-        });     
+      .catch(err => {
+        console.log('Error', err.message);
+        // erro handling
+      });
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.container1}>
@@ -83,14 +87,30 @@ const PostCard = ({
         </View>
       </View>
       <Text style={styles.textPost}>{status}</Text>
+      <View style={{flexDirection:'row', justifyContent:'flex-start'}}>
+        {media.map(item => {
+          return (
+            <View>
+              <Image
+                style={styles.imageContent}
+                resizeMode="contain"
+                source={{
+                  uri: `${item}`,
+                }}
+              />
+            </View>
+          );
+        })}
+      </View>
+
       <View style={styles.response}>
         <View style={styles.response1}>
           <TouchableOpacity
             style={{flexDirection: 'row'}}
             onPress={() => {
-              setIsLike(!isLike)
+              setIsLike(!isLike);
               handleLike();
-              }}>
+            }}>
             <AntDesign
               color={
                 likeCount?.find(ids => myId == ids) ? color.blue2 : color.grey4
@@ -181,33 +201,10 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderColor: color.grey1,
   },
+  imageContent: {
+    width: 100,
+    marginTop: 5,
+    height: 200,
+    marginRight: 10,
+  },
 });
-
-export const orderTransaction = async (id, date, address, totalitem) => {
-  const token = await AsyncStorage.getItem('access_token');
-
-  var qs = require('qs');
-  var data = qs.stringify({
-    id_partner: id,
-    appointment_date: date,
-    appointment_address: address,
-    total_item: totalitem,
-  });
-  var config = {
-    method: 'post',
-    url: 'https://techstop.gabatch11.my.id/transaction',
-    headers: {
-      Authorization: 'bearer ' + token,
-    },
-    data: data,
-  };
-
-  axios(config)
-  axios(config)
-    .then(function (response) {
-      console.log(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};

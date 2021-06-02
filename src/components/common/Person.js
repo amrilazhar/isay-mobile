@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, Linking} from 'react-native';
 import {color} from '../../styles/color';
 import moment from 'moment';
 import {useDispatch} from 'react-redux';
-import {getChatRoomAct,chatMessageAct} from '../../redux/action/Chat';
+import {getChatRoomAct, chatMessageAct} from '../../redux/action/Chat';
 
 const Person = ({navigation, item}) => {
   const dispatch = useDispatch();
@@ -13,10 +13,8 @@ const Person = ({navigation, item}) => {
 
   const displayMessageImageLink = link => {
     return (
-      <Text
-        style={{color: 'blue'}}
-        onPress={() => Linking.openURL(link)}>
-        {link.substring(0,20)}
+      <Text style={{color: 'blue'}} onPress={() => Linking.openURL(link)}>
+        {link.substring(0, 20)}
       </Text>
     );
   };
@@ -43,24 +41,29 @@ const Person = ({navigation, item}) => {
         <View>
           <View
             style={{
-              justifyContent: 'space-between',
               flexDirection: 'row',
-              height: 22,
-              width: '75%',
             }}>
-            <Text style={styles.name}>
-              {item.from._id === item.chatOwner ? item.to.name : item.from.name}
-            </Text>
-            <Text style={{textAlign: 'right'}}>{timeCreated}</Text>
+            <View style={{
+              flexDirection:'row',
+              justifyContent: 'space-between',
+              width: '87%'
+            }} >
+              <Text style={styles.name}>
+                {item.from._id === item.chatOwner
+                  ? item.to.name
+                  : item.from.name}
+              </Text>
+              <Text style={{color:color.grey4}}>{timeCreated}</Text>
+            </View>
           </View>
           <View style={{width: '75%'}}>
             <Text
               style={styles.text}
               onPress={() => {
-                navigation.navigate('Chat', {receiver: receiver})
+                navigation.navigate('Chat', {receiver: receiver});
                 dispatch(getChatRoomAct(receiver));
                 dispatch(chatMessageAct([]));
-                }}>
+              }}>
               {item.from._id === item.chatOwner
                 ? 'You : '
                 : `${item.from.name} : `}

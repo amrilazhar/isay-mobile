@@ -16,7 +16,9 @@ import socketIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import {getRoomListAct} from '../redux/action/Chat';
-import {getStatusByUserInterestAction} from '../redux/action/Action';
+import {
+  getStatusByUserInterestAction,
+} from '../redux/action/Action';
 import {useSelector, useDispatch} from 'react-redux';
 
 const ENDPOINT = 'https://isay.gabatch11.my.id/';
@@ -47,7 +49,7 @@ const Messages = props => {
         <FlatList
           data={roomList.roomList}
           renderItem={renderItem}
-          keyExtractor={item => item._id}
+          keyExtractor={item => "room-list"+item._id}
         />
       );
     } else {
@@ -78,14 +80,14 @@ const Messages = props => {
       io.disconnect();
     };
   }, []);
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            props.navigation.navigate('Home');
             dispatch(getStatusByUserInterestAction());
+            props.navigation.navigate('Home');            
           }}>
           <MaterialIcons name="arrow-back-ios" size={25} color={color.white} />
         </TouchableOpacity>
@@ -111,12 +113,12 @@ const styles = StyleSheet.create({
   container: {flex: 1},
   loadContainer: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   loadHorizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
   },
   header: {
     flexDirection: 'row',

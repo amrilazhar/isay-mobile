@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, Linking} from 'react-native';
 import {color} from '../../styles/color';
 import moment from 'moment';
 import {useDispatch} from 'react-redux';
-import {getChatRoomAct} from '../../redux/action/Chat';
+import {getChatRoomAct,chatMessageAct} from '../../redux/action/Chat';
 
 const Person = ({navigation, item}) => {
   const dispatch = useDispatch();
@@ -59,6 +59,7 @@ const Person = ({navigation, item}) => {
               onPress={() => {
                 navigation.navigate('Chat', {receiver: receiver})
                 dispatch(getChatRoomAct(receiver));
+                dispatch(chatMessageAct([]));
                 }}>
               {item.from._id === item.chatOwner
                 ? 'You : '

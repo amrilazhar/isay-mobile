@@ -54,8 +54,16 @@ const Login = ({navigation}) => {
         navigation.navigate('Question');
       }
     } catch (error) {
-      console.log('err', error);
-      alert('email or password is wrong', error);
+      if (error.response !== undefined) {
+        if (error.response.status === 422) {
+          console.log("masuk validation error");
+          alert('Your email or password is wrong');
+        } else if (error.response.status === 401) {
+          alert('Please verify your email first');
+        }        
+      } else {
+        alert('Network Error, Please Check Your Connection');
+      }
     }
   };
   return (

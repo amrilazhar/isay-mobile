@@ -170,7 +170,7 @@ export const getLocationAction = () => {
 };
 
 export const getStatusByUserInterestAction = () => {
-  let url = 'https://isay.gabatch11.my.id/status/interest/loadmore?limit=20';
+  let url = 'https://isay.gabatch11.my.id/status/interest/loadmore?limit=40';
   return async dispatch => {
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);

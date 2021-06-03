@@ -11,10 +11,6 @@ const dispatch = useDispatch();
 const myProfile = useSelector(state => state.user.myProfile);
 
 
-useEffect(() => {
-  
-}, []);
-
   return (
     <View style={{flex: 1}}>
       <View style={styles.header}>

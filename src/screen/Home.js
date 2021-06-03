@@ -40,6 +40,7 @@ const Home = ({navigation}) => {
     dispatch(getInterestAction());
     dispatch(getMyProfileAction());
     dispatch(getPostByInterestAction(interestId));
+    
   }, [interestId, postByInterest]);
 
   const renderItem = ({item}) => {

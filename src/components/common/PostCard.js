@@ -12,7 +12,7 @@ import {
   getMyProfileAction,
   getStatusByUserInterestAction,
   getStatusDetailsAction,
-  getPostByInterestAction
+  getPostByInterestAction,
 } from '../../redux/action/Action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -30,7 +30,7 @@ const PostCard = ({
   userId,
   category,
   media,
-  interestId
+  interestId,
 }) => {
   const dispatch = useDispatch();
   const [isLike, setIsLike] = useState(false);
@@ -43,8 +43,10 @@ const PostCard = ({
     // dispatch(getMyProfileAction());
   }, []);
 
-  const handleLike = async (statusLike) => {
-    let url = `https://isay.gabatch11.my.id/status/${ statusLike ? "like" : "unlike"}/${statusId}`;
+  const handleLike = async statusLike => {
+    let url = `https://isay.gabatch11.my.id/status/${
+      statusLike ? 'like' : 'unlike'
+    }/${statusId}`;
     console.log('statusId', statusId);
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
@@ -55,8 +57,9 @@ const PostCard = ({
     })
       .then(({data}) => {
         // console.log('markerdata', data);
+        // dispatch(getStatusByUserInterestAction());
         dispatch(getPostByInterestAction(interestId));
-        // success handling
+        
       })
       .catch(err => {
         console.log('Error', err.message);

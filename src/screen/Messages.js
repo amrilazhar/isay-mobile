@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Text,
+  ScrollView,
 } from 'react-native';
 import {color} from '../styles/color';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -17,9 +18,7 @@ import socketIOClient from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import {getRoomListAct} from '../redux/action/Chat';
-import {
-  getStatusByUserInterestAction,
-} from '../redux/action/Action';
+import {getStatusByUserInterestAction} from '../redux/action/Action';
 import {useSelector, useDispatch} from 'react-redux';
 
 const ENDPOINT = 'https://isay.gabatch11.my.id/';
@@ -50,7 +49,7 @@ const Messages = props => {
         <FlatList
           data={roomList.roomList}
           renderItem={renderItem}
-          keyExtractor={item => "room-list"+item._id}
+          keyExtractor={item => 'room-list' + item._id}
         />
       );
     } else {
@@ -89,7 +88,7 @@ const Messages = props => {
           onPress={() => {
             console.log('Messages.js line 90');
             dispatch(getStatusByUserInterestAction());
-            props.navigation.navigate('Home');            
+            props.navigation.navigate('Home');
           }}>
           <MaterialIcons name="arrow-back-ios" size={25} color={color.white} />
         </TouchableOpacity>
@@ -105,7 +104,7 @@ const Messages = props => {
         </View>
         {/* <Entypo name="dots-three-horizontal" size={25} color={color.white} /> */}
       </View>
-      {displayRoomList()}
+      <ScrollView>{displayRoomList()}</ScrollView>
     </View>
   );
 };
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
   },
   message: {
     color: color.white,
-    marginLeft:'48%',
+    marginLeft: '48%',
     // fontWeight: 'bold',
     fontSize: 18,
   },

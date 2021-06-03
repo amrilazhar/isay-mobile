@@ -104,7 +104,7 @@ const Messages = props => {
         </View>
         {/* <Entypo name="dots-three-horizontal" size={25} color={color.white} /> */}
       </View>
-      <ScrollView>{displayRoomList()}</ScrollView>
+      {displayRoomList()}
     </View>
   );
 };

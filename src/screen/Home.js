@@ -109,7 +109,7 @@ const Home = ({navigation}) => {
           <TextInput
             style={styles.input}
             placeholderTextColor={color.grey1}
-            placeholder={'Search annonymous'}
+            placeholder={'Search'}
             value={textInput}
             onChangeText={setTextInput}
           />

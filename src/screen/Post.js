@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import ImagePicker from 'react-native-image-crop-picker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
@@ -43,7 +44,6 @@ const Post = props => {
   }, []);
 
   const renderItem = ({item}) => {
-
     return (
       <TouchableOpacity
         onPress={() => {
@@ -68,29 +68,54 @@ const Post = props => {
   };
 
   const post = async () => {
+    console.log('blob', media);
     let url = 'https://isay.gabatch11.my.id/status/';
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
+    var FormData = require('form-data');
+    var data = new FormData();
+    data.append('content', content);
+    data.append('interest', interest);
+    data.append('media', media);
+    data.append('media', {
+      uri: media.path,
+      type: media.mime,
+      name: 'myfile'
+    });
     try {
       const send = await axios({
         method: 'POST',
         url: url,
-        data: {
-          content,
-          interest,
-          media,
-        },
-        headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
+        data: data,
+        headers: {Authorization: AuthStr},
       });
+      console.log('send',send);
       if (send) {
         setContent('');
         setInterest('');
         setMedia('');
         dispatch(getStatusByUserInterestAction());
+        
       }
     } catch (error) {
       console.log('err', error);
     }
+  };
+
+
+  const openImagePicker = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      waitAnimationEnd: false,
+      mediaType: 'photo',
+      includeBase64: true,
+      // cropping: true,
+    }).then(media => {
+      console.log('mymedia', media);
+      setMedia(media);
+      
+    });
   };
 
   return (
@@ -147,7 +172,11 @@ const Post = props => {
       </View>
       <View style={{flex: 1, justifyContent: 'flex-end'}}>
         <View style={styles.container2}>
-          <TouchableOpacity style={styles.buttonContainer} onPress={() => {}}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => {
+              openImagePicker();
+            }}>
             <View style={styles.buttonContainer1}>
               <Feather name="image" size={18} color={color.black} />
               <Text style={styles.buttonTitle}>Image</Text>

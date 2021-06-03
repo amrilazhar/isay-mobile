@@ -108,8 +108,6 @@ const Activities = () => {
 
 const anotherUserActivity = useSelector(state => state.user.anotherUserActivity);
 
-console.log('anotherUserAct', anotherUserActivity);
-
 
   const renderItem = ({item}) => {
     return (
@@ -131,7 +129,7 @@ console.log('anotherUserAct', anotherUserActivity);
       <FlatList
         data={anotherUserActivity}
         renderItem={renderItem}
-        keyExtractor={item => item._id}
+        keyExtractor={item => `home-post-card-${item._id}`}
       />
     </View>
   );

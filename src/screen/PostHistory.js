@@ -39,8 +39,8 @@ const PostHistory = ({navigation}) => {
       <FlatList
         data={historyPost}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
-       />
+        keyExtractor={item => `home-post-card-${item._id}`}
+      />
     </View>
   );
 };

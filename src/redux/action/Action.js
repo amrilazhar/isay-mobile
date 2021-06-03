@@ -161,7 +161,6 @@ export const getLocationAction = () => {
     try {
       const response = await axios.get(url);
       dispatch(getLocationSuccess(response.data.data));
-      // console.log('list location', response.data.data);
     } catch (error) {
       console.log('Error', error);
       dispatch(getLocationFailure(error));
@@ -170,7 +169,7 @@ export const getLocationAction = () => {
 };
 
 export const getStatusByUserInterestAction = () => {
-  let url = 'https://isay.gabatch11.my.id/status/interest/loadmore?limit=40';
+  let url = 'https://isay.gabatch11.my.id/status/interest?limit=50';
   return async dispatch => {
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
@@ -180,7 +179,6 @@ export const getStatusByUserInterestAction = () => {
         headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
       });
       dispatch(getStatusByUserInterestSucces(response.data.data));
-      // console.log('statusredux', response.data.data);
     } catch (error) {
       console.log('Error', error);
       dispatch(getStatusByUserInterestFailure(error));
@@ -199,7 +197,6 @@ export const getStatusDetailsAction = statusId => {
         headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
       });
       dispatch(getstatusDetailsSuccess(response.data.data));
-      // console.log('statusredux', response.data.data);
     } catch (error) {
       console.log('Error', error);
       dispatch(getStatusDetailsFailure(error));
@@ -220,7 +217,6 @@ export const getAllCommentAction = statusId => {
         headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
       });
       dispatch(getAllCommentSuccess(response.data));
-      // console.log('allcomments', response.data);
     } catch (error) {
       console.log('Error', error);
       dispatch(getAllCommentSuccess({data: {comments: {}}}));
@@ -235,7 +231,6 @@ export const getInterestAction = () => {
     try {
       const response = await axios.get(url);
       dispatch(getInterestSuccess(response.data.data));
-      // console.log(response.data.data);
     } catch (error) {
       console.log('Error', error);
       dispatch(getInterestFailure(error));
@@ -272,7 +267,6 @@ export const getHistoryPostAction = () => {
         headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
       });
       dispatch(getHistoryPostSuccess(response.data.data));
-      // console.log('result', response.data.data.docs);
     } catch (error) {
       console.log('Error', error);
       dispatch(getHistoryPostFailure);
@@ -393,7 +387,7 @@ export const getMyActivityAction = () => {
 };
 
 export const getPostByInterestAction = interestId => {
-  let url = `https://isay.gabatch11.my.id/status/interest/${interestId}/loadmore/?limit=30`;
+  let url = `https://isay.gabatch11.my.id/status/interest/${interestId}?limit=100`;
   return async dispatch => {
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
@@ -402,7 +396,7 @@ export const getPostByInterestAction = interestId => {
       const response = await axios.get(url, {
         headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
       });
-      dispatch(getStatusByUserInterestSucces(response.data.data));
+      dispatch(getPostByInterestSuccess(response.data.data));
     } catch (error) {
       console.log('Error', error);
       dispatch(getPostByInterestFailure(error));

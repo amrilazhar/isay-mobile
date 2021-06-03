@@ -19,9 +19,8 @@ const initialState = {
   notifCount: [0, 0],
   postByInterest: {},
   anotherUserActivity: {},
+  getPostType : "",
 };
-// console.log('location list1', initialState.location);
-// console.log('initialstateUserdetail', initialState.userDetail);
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -41,14 +40,16 @@ const userReducer = (state = initialState, action) => {
         loading: false,
         error: action.error,
       });
-    case types.GET_STATUS_BY_USER_INTEREST_SUCCESS:
-      return Object.assign({}, state, {
+    case types.GET_STATUS_BY_USER_INTEREST_SUCCESS: 
+    return Object.assign({}, state, {
         loading: false,
-        status: action.payload.reverse(),
+        getPostType : "userInterest",
+        status: action.payload,
       });
     case types.GET_STATUS_BY_USER_INTEREST_FAILURE:
       return Object.assign(state, {
         loading: false,
+        getPostType : "userInterest",
         error: action.error,
       });
     case types.GET_STATUS_DETAILS_SUCCESS:
@@ -156,11 +157,13 @@ const userReducer = (state = initialState, action) => {
     case types.GET_POST_BY_INTEREST_SUCCESS:
       return Object.assign(state, {
         loading: false,
-        postByInterest: action.payload,
+        getPostType : "oneInterest",
+        status: action.payload,
       });
     case types.GET_POST_BY_INTEREST_FAILURE:
       return Object.assign(state, {
         loading: false,
+        getPostType : "oneInterest",
         error: action.error,
       });
     case types.GET_ANOTHER_USER_ACTIVITY_SUCCESS:

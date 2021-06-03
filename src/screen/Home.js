@@ -75,8 +75,6 @@ const Home = ({navigation}) => {
   };
 
   const renderModal = ({item}) => {
-    // console.log('item', item);
-
     return (
       <TouchableOpacity
         onPress={() => {
@@ -127,7 +125,7 @@ const Home = ({navigation}) => {
       <FlatList
         data={show}
         renderItem={renderItem}
-        keyExtractor={item => item._id}
+        keyExtractor={item => `home-post-card-${item._id}`}
       />
 
       {/*======SHOW MODAL===== */}

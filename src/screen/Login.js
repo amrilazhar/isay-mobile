@@ -18,8 +18,9 @@ const Login = ({navigation}) => {
   const dispatch = useDispatch();
 
   // const [email, setEmail] = useState('lisanewell76@gmail.com');
+  const [email, setEmail] = useState('learningalfian@gmail.com');
   const [password, setPassword] = useState('Aneh1234!!');
-  const [email, setEmail] = useState('user2@glintsmail.com');
+  // const [email, setEmail] = useState('user2@glintsmail.com');
 
   const handleLogin = async () => {
     try {
@@ -35,12 +36,8 @@ const Login = ({navigation}) => {
         },
       });
 
-      console.log('token', data.data.token);
       AsyncStorage.setItem('accessToken', data.data.token);
 
-      // setEmail('');
-      // setPassword('');
-      // console.log('id', data.data.id);
       try {
         const response = await axios({
           method: 'GET',
@@ -49,7 +46,6 @@ const Login = ({navigation}) => {
             Authorization: 'Bearer ' + data.data.token,
           },
         });
-        // console.log('response', response);
         dispatch(getStatusByUserInterestAction());
         navigation.navigate('MainTab');
       } catch (error) {
@@ -58,7 +54,6 @@ const Login = ({navigation}) => {
     } catch (error) {
       if (error.response !== undefined) {
         if (error.response.status === 422) {
-          console.log('masuk validation error');
           alert('Your email or password is wrong');
         } else if (error.response.status === 401) {
           alert('Please verify your email first');

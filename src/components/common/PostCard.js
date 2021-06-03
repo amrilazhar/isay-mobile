@@ -57,8 +57,8 @@ const PostCard = ({
     })
       .then(({data}) => {
         // console.log('markerdata', data);
-        // dispatch(getStatusByUserInterestAction());
-        dispatch(getPostByInterestAction(interestId));
+        dispatch(getStatusByUserInterestAction());
+        // dispatch(getPostByInterestAction(interestId));
         
       })
       .catch(err => {

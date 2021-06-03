@@ -42,8 +42,8 @@ const PostCard = ({
     dispatch(getStatusByUserInterestAction());
   }, []);
 
-  const handleLike = async () => {
-    let url = `https://isay.gabatch11.my.id/status/like/${statusId}`;
+  const handleLike = async (statusLike) => {
+    let url = `https://isay.gabatch11.my.id/status/${ statusLike ? "like" : "unlike"}/${statusId}`;
     console.log('statusId', statusId);
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
@@ -109,7 +109,7 @@ const PostCard = ({
             style={{flexDirection: 'row'}}
             onPress={() => {
               setIsLike(!isLike);
-              handleLike();
+              handleLike(!isLike);
             }}>
             <AntDesign
               color={

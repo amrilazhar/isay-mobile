@@ -264,12 +264,13 @@ const Chat = ({route, navigation}) => {
   }, []);
 
   const loadAllDisplay = () => {
+    
     if (room.loading) {
       return displayLoading();
     } else {
       startServer(room.roomData._id);
       if (chatHistory.loading) {
-        return displayLoading();
+        return [displayChatName(), displayLoading(), displayChat()]; 
       } else {
         return [displayChatName(), displayChat()];
       }
@@ -376,5 +377,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     textAlign: 'left',
     width: '80%',
+  },
+  loadContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  loadHorizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
   },
 });

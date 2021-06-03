@@ -11,14 +11,16 @@ import axios from 'axios';
 import CustomButton from '../components/common/CustomButton';
 import CustomTextInput from '../components/common/CustomTextInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch} from 'react-redux';
+import {getStatusByUserInterestAction} from '../redux/action/Action';
 
 const Login = ({navigation}) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   // const [email, setEmail] = useState('lisanewell76@gmail.com');
   const [password, setPassword] = useState('Aneh1234!!');
   const [email, setEmail] = useState('user2@glintsmail.com');
-  
+
   const handleLogin = async () => {
     try {
       const {data} = await axios({
@@ -48,7 +50,7 @@ const Login = ({navigation}) => {
           },
         });
         // console.log('response', response);
-
+        dispatch(getStatusByUserInterestAction());
         navigation.navigate('MainTab');
       } catch (error) {
         navigation.navigate('Question');
@@ -56,11 +58,11 @@ const Login = ({navigation}) => {
     } catch (error) {
       if (error.response !== undefined) {
         if (error.response.status === 422) {
-          console.log("masuk validation error");
+          console.log('masuk validation error');
           alert('Your email or password is wrong');
         } else if (error.response.status === 401) {
           alert('Please verify your email first');
-        }        
+        }
       } else {
         alert('Network Error, Please Check Your Connection');
       }

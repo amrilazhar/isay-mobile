@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  KeyboardAvoidingView
 } from 'react-native';
 import {color} from '../styles/color';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -199,10 +200,9 @@ const Chat = ({route, navigation}) => {
               color={color.white}
             />
           </TouchableOpacity>
-
-          <View style={styles.container1}>
             <Image style={styles.logo} source={{uri: avatar}} />
             <Text style={styles.name}>{name}</Text>
+          <View style={styles.container1}>
             <Text style={styles.name}>
               {receiverOnlineStatus === null
                 ? onlineStatus
@@ -333,7 +333,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: color.grey2,
-    marginLeft:10
+    marginLeft:10,
+    height: 50,
   },
   logo: {
     width: 45,

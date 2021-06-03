@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 //Icon
 
@@ -28,7 +29,7 @@ import {
   getStatusDetailsAction,
 } from '../../redux/action/Action';
 import {FlatList} from 'react-native-gesture-handler';
-import { chatMessageAct, getChatRoomAct } from '../../redux/action/Chat';
+import {chatMessageAct, getChatRoomAct} from '../../redux/action/Chat';
 
 const CardStatusDetails = ({statusId, navigation, category}) => {
   // post comment //
@@ -159,11 +160,14 @@ const CardStatusDetails = ({statusId, navigation, category}) => {
             <Text>Comments {postDetails?.comment?.length}</Text>
           </View>
           <View style={styles.style4}>
-            <TouchableOpacity style={{flexDirection:'row'}}
+            <TouchableOpacity
+              style={{flexDirection: 'row'}}
               onPress={() => {
                 dispatch(getChatRoomAct(postDetails?.owner?._id));
                 dispatch(chatMessageAct([]));
-                navigation.navigate('Chat', {receiver: postDetails?.owner?._id});
+                navigation.navigate('Chat', {
+                  receiver: postDetails?.owner?._id,
+                });
               }}>
               <Ionicons name="chatbubbles-outline" size={20} />
               <Text>Personal chat </Text>
@@ -177,22 +181,24 @@ const CardStatusDetails = ({statusId, navigation, category}) => {
         <View style={{height: 320}}>{displayComments()}</View>
       </View>
       <View style={{justifyContent: 'flex-end', flex: 1}}>
-        <View style={styles.postComment}>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor={color.grey1}
-            placeholder={'Type Your Comment'}
-            onChangeText={setContent}
-            value={content}
-          />
-          <TouchableOpacity onPress={addComment}>
-            <MaterialCommunityIcons
-              name="send-circle"
-              size={40}
-              color={color.blue2}
+        <KeyboardAvoidingView style={{justifyContent: 'flex-end', flex: 1}}>
+          <View style={styles.postComment}>
+            <TextInput
+              style={styles.input}
+              placeholderTextColor={color.grey1}
+              placeholder={'Type Your Comment'}
+              onChangeText={setContent}
+              value={content}
             />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity onPress={addComment}>
+              <MaterialCommunityIcons
+                name="send-circle"
+                size={40}
+                color={color.blue2}
+              />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       </View>
     </View>
   );
@@ -297,6 +303,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: color.grey2,
+    height: 50,
   },
   postComment: {
     flexDirection: 'row',

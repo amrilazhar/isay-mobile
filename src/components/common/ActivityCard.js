@@ -1,47 +1,35 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import CustomPersonalButton from './CustomPersonalButton';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
-import {chatMessageAct, getChatRoomAct} from '../../redux/action/Chat';
 import {color} from '../../styles/color';
-import {
-  getMyProfileAction,
-  getStatusByUserInterestAction,
-  getStatusDetailsAction,
-  getPostByInterestAction
-} from '../../redux/action/Action';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const PostCard = ({
+const ActivityCard = ({
+  avatar,
   name,
-  status,
-  navigation,
-  image,
+  type,
+  content,
+  postCreated,
+  media,
   likeCount,
   commentCount,
-  postCreated,
-  statusId,
-  ownerId,
   userId,
-  category,
-  media,
-  interestId
 }) => {
   const dispatch = useDispatch();
+  const timeCreated = moment(new Date(postCreated)).fromNow();
   const [isLike, setIsLike] = useState(false);
   const myProfile = useSelector(state => state.user.myProfile);
-  const timeCreated = moment(new Date(postCreated)).fromNow();
   const myId = myProfile.id;
-
-  useEffect(() => {
-    console.log('postcardJSline 39');
-    // dispatch(getMyProfileAction());
-  }, []);
 
   const handleLike = async () => {
     let url = `https://isay.gabatch11.my.id/status/like/${statusId}`;
@@ -55,40 +43,44 @@ const PostCard = ({
     })
       .then(({data}) => {
         // console.log('markerdata', data);
-        dispatch(getPostByInterestAction(interestId));
+        dispatch(getStatusByUserInterestAction());
         // success handling
       })
       .catch(err => {
         console.log('Error', err.message);
+        // erro handling
       });
   };
+
   return (
     <View style={styles.container}>
+      <View>
+        {type == 'post_comment' ? (
+          <Text>Commented On This Post</Text>
+        ) : (
+          <Text>Like This Post</Text>
+        )}
+      </View>
       <View style={styles.container1}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View>
             <Image
               style={styles.logo}
               source={{
-                uri: `${image}`,
+                uri: `${avatar}`,
               }}
             />
           </View>
           <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('UserProfile', {userId})}>
-              <Text style={styles.name}>{name}</Text>
-              <Text>{timeCreated}</Text>
-            </TouchableOpacity>
+            <Text style={styles.name}>{name}</Text>
+            <Text>{timeCreated}</Text>
           </View>
         </View>
-        <View>
-          <CustomPersonalButton title={category} />
-        </View>
+        <View></View>
       </View>
-      <Text style={styles.textPost}>{status}</Text>
+      <Text style={styles.textPost}>{content}</Text>
       <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-        {media.map(item => {
+        {media?.map(item => {
           return (
             <View>
               <Image
@@ -118,7 +110,7 @@ const PostCard = ({
               name="like1"
               size={20}
             />
-            <Text style={styles.text1}>Like {likeCount.length} </Text>
+            <Text style={styles.text1}>Like {likeCount?.length} </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.response2}>
@@ -128,7 +120,7 @@ const PostCard = ({
               dispatch(getStatusDetailsAction(statusId));
               navigation.navigate('StatusDetails', {statusId, category});
             }}>
-            <Text style={styles.text1}>Comments {commentCount} </Text>
+            <Text style={styles.text1}>Comments {commentCount?.length} </Text>
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -136,9 +128,9 @@ const PostCard = ({
           <Text
             style={styles.text1}
             onPress={() => {
-              dispatch(getChatRoomAct(ownerId));
+              dispatch(getChatRoomAct(userId));
               dispatch(chatMessageAct([]));
-              navigation.navigate('Chat', {receiver: ownerId});
+              navigation.navigate('Chat', {receiver: userId});
             }}>
             Personal chat
           </Text>
@@ -148,7 +140,7 @@ const PostCard = ({
   );
 };
 
-export default PostCard;
+export default ActivityCard;
 
 const styles = StyleSheet.create({
   container: {

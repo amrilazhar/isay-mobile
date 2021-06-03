@@ -5,6 +5,7 @@ import {color} from '../styles/color';
 import CustomPersonalButton from '../components/common/CustomPersonalButton';
 import PostCard from '../components/common/PostCard';
 import {useDispatch, useSelector} from 'react-redux';
+import ActivityCard from '../components/common/ActivityCard';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -103,10 +104,35 @@ const PostHistory = ({navigation}) => {
   );
 };
 
-function Activities() {
+const Activities = () => {
+
+const anotherUserActivity = useSelector(state => state.user.anotherUserActivity);
+
+console.log('anotherUserAct', anotherUserActivity);
+
+
+  const renderItem = ({item}) => {
+    return (
+      <ActivityCard
+        avatar={item?.status_id?.owner?.avatar}
+        name={item?.status_id?.owner?.name}
+        content={item?.status_id?.content}
+        postCreated={item?.status_id?.created_at}
+        media={item?.status_id?.media}
+        likeCount={item?.status_id?.likeBy}
+        commentCount={item?.status_id?.comment}
+        userId={item?.owner?._id}
+        type={item?.type}
+      />
+    );
+  };
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Activities!</Text>
+    <View>
+      <FlatList
+        data={anotherUserActivity}
+        renderItem={renderItem}
+        keyExtractor={item => item._id}
+      />
     </View>
   );
 }

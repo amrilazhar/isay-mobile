@@ -1,36 +1,48 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, FlatList, TextInput, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TextInput,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import PostCard from '../components/common/PostCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Search from '../components/common/Search';
 import {useDispatch, useSelector} from 'react-redux';
+import Modal from 'react-native-modal';
 import {
   getStatusByUserInterestAction,
   getStatusDetailsAction,
   getMyProfileAction,
+  getInterestAction,
+  getPostByInterestAction,
 } from '../redux/action/Action';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { color } from '../styles/color';
-
+import {color} from '../styles/color';
 
 const Home = ({navigation}) => {
+  const [isModalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   const myProfile = useSelector(state => state.user.myProfile);
   const post = useSelector(state => state.user.status);
   const [textInput, setTextInput] = useState('');
-  const show= [];
-  
-  
-  useEffect(() => {
-    console.log('Home 39');
-    dispatch(getStatusByUserInterestAction());
-    dispatch(getMyProfileAction())
-  }, []);
-  
+  const show = [];
+  const postByInterest = useSelector(state => state.user.postByInterest);
+  const options = useSelector(state => state.user.interest);
+  const [interestId, setInterestId] = useState('');
 
-  const renderItem = ({item}) => {    
+  useEffect(() => {
+    dispatch(getInterestAction());
+    dispatch(getMyProfileAction());
+    dispatch(getPostByInterestAction(interestId));
+  }, [interestId, postByInterest]);
+
+  const renderItem = ({item}) => {
     return (
       <PostCard
         name={item?.owner?.name}
@@ -45,6 +57,7 @@ const Home = ({navigation}) => {
         userId={item?.owner?.id}
         category={item.interest[0].interest}
         media={item.media}
+        interestId={interestId}
       />
     );
   };
@@ -56,6 +69,32 @@ const Home = ({navigation}) => {
     }
   }
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const renderModal = ({item}) => {
+    // console.log('item', item);
+
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setInterestId(item._id);
+          toggleModal();
+          
+        }}>
+        <Text
+          style={{
+            marginLeft: 17,
+            marginVertical: 10,
+            borderBottomWidth: 1,
+            borderColor: color.grey2,
+          }}>
+          {item.interest}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={{marginBottom: 130}}>
@@ -77,7 +116,7 @@ const Home = ({navigation}) => {
           />
         </View>
         <MaterialIcons
-          onPress={() => navigation.navigate('FilterFeed')}
+          onPress={() => toggleModal()}
           name="filter-tilt-shift"
           size={30}
           color={color.white}
@@ -89,6 +128,54 @@ const Home = ({navigation}) => {
         renderItem={renderItem}
         keyExtractor={item => item._id}
       />
+
+      {/*======SHOW MODAL===== */}
+      <Modal
+        isVisible={isModalVisible}
+        style={{
+          margin: 0,
+          justifyContent: 'flex-end',
+        }}
+        onBackdropPress={toggleModal}
+        animationIn={'fadeInUp'}
+        animationOut={'fadeOutDown'}
+        useNativeDriver={true}
+        animationInTiming={1000}>
+        <View
+          style={{
+            backgroundColor: color.white,
+            borderColor: 'black',
+
+            borderColor: 'white',
+            borderTopRightRadius: 20,
+            borderTopLeftRadius: 20,
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 16,
+              marginVertical: 5,
+              fontWeight: 'bold',
+            }}>
+            What topic would you like to see?
+          </Text>
+          <FlatList
+            data={options}
+            renderItem={renderModal}
+            keyExtractor={item => item._id}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(getStatusByUserInterestAction());
+              toggleModal();
+            }}>
+            <Text style={{textAlign: 'center', marginVertical: 10}}>
+              By My Interst
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      {/* ====MODAL==== */}
     </View>
   );
 };
@@ -134,4 +221,4 @@ const styles = StyleSheet.create({
 });
 
 // 1 state penampung text input
-// 
+//

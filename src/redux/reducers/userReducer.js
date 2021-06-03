@@ -6,7 +6,6 @@ const initialState = {
   loadingCountNotif: true,
   userDetail: {},
   location: {},
-  status: {},
   detailsStatus: {},
   allComments: {},
   allNotification: [],
@@ -14,8 +13,12 @@ const initialState = {
   myProfile: {},
   historyPost: {},
   anotherHistoryPost: {},
+  status: {},
+  myActivity: {},
   anotherProfile: {},
-  notifCount: [0,0],
+  notifCount: [0, 0],
+  postByInterest: {},
+  anotherUserActivity: {},
 };
 // console.log('location list1', initialState.location);
 // console.log('initialstateUserdetail', initialState.userDetail);
@@ -132,12 +135,42 @@ const userReducer = (state = initialState, action) => {
     case types.GET_ALL_NOTIFICATION_COUNT_SUCCESS:
       return Object.assign(state, {
         loadingCountNotif: false,
-        notifCount: [action.payload.chatCount,action.payload.notifCount],
+        notifCount: [action.payload.chatCount, action.payload.notifCount],
       });
     case types.GET_ALL_NOTIFICATION_COUNT_FAILURE:
       return Object.assign(state, {
         loadingCountNotif: false,
-        notifCount : [0,0],
+        notifCount: [0, 0],
+        error: action.error,
+      });
+    case types.GET_MY_ACTIVITY_SUCCESS:
+      return Object.assign(state, {
+        loading: false,
+        myActivity: action.payload,
+      });
+    case types.GET_MY_ACTIVITY_FAILURE:
+      return Object.assign(state, {
+        loading: false,
+        error: action.error,
+      });
+    case types.GET_POST_BY_INTEREST_SUCCESS:
+      return Object.assign(state, {
+        loading: false,
+        postByInterest: action.payload,
+      });
+    case types.GET_POST_BY_INTEREST_FAILURE:
+      return Object.assign(state, {
+        loading: false,
+        error: action.error,
+      });
+    case types.GET_ANOTHER_USER_ACTIVITY_SUCCESS:
+      return Object.assign(state, {
+        loading: false,
+        anotherUserActivity: action.payload,
+      });
+    case types.GET_ANOTHER_USER_ACTIVITY_FAILURE:
+      return Object.assign(state, {
+        loading: false,
         error: action.error,
       });
     default:

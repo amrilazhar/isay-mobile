@@ -8,7 +8,9 @@ import {
   FlatList,
 } from 'react-native';
 import {SvgUri} from 'react-native-svg';
+import {useDispatch} from 'react-redux';
 import CustomButton from '../components/common/CustomButton';
+import {getStatusByUserInterestAction} from '../redux/action/Action';
 import {color} from '../styles/color';
 
 const ConfirmAvatar = ({route, navigation}) => {
@@ -67,7 +69,10 @@ const ConfirmAvatar = ({route, navigation}) => {
         <View style={styles.button}>
           <CustomButton
             title="Start"
-            onPressButton={() => navigation.navigate('MainTab')}
+            onPressButton={() => {
+              dispatch(getStatusByUserInterestAction());
+              navigation.navigate('MainTab');
+            }}
           />
         </View>
       </View>

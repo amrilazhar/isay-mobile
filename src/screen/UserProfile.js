@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   getAnotherHistoryPostAction,
   getAnotherProfileAction,
+  getAnotherUserActivityAction,
   getStatusByUserInterestAction,
 } from '../redux/action/Action';
 import {color} from '../styles/color';
@@ -15,13 +16,13 @@ const UserProfile = ({route, navigation}) => {
   const dispatch = useDispatch();
   const anotherProfile = useSelector(state => state.user.anotherProfile);
   const bio = anotherProfile?.bio;
-  // console.log('anotherProfile', anotherProfile.bio);
+  const anotherUserActivity = useSelector(state => state.user.anotherUserActivity);
 
   useEffect(() => {
-    console.log('user Profile 21');
     dispatch(getAnotherProfileAction(userId));
     dispatch(getAnotherHistoryPostAction(userId));
-  }, []);
+    dispatch(getAnotherUserActivityAction(userId));
+  }, [userId]);
 
   return (
     <View style={{flex: 1}}>
@@ -53,9 +54,9 @@ const UserProfile = ({route, navigation}) => {
           alignItems: 'center',
         }}>
         <Text style={styles.textName}>{anotherProfile.name}</Text>
-        <TouchableOpacity style={styles.message}>
+        {/* <TouchableOpacity style={styles.message}>
           <Text style={{color: color.white}}>Message</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={{flexDirection: 'row', marginLeft: 105}}>
         <Ionicons name="location" size={20} color={color.black} />

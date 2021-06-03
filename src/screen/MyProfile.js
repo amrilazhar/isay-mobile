@@ -12,7 +12,7 @@ const myProfile = useSelector(state => state.user.myProfile);
 
 
 useEffect(() => {
-  dispatch(getMyProfileAction());
+  
 }, []);
 
   return (

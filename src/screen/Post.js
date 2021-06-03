@@ -32,6 +32,7 @@ const Post = props => {
   const [interest, setInterest] = useState('');
   const [content, setContent] = useState('');
   const [media, setMedia] = useState('');
+  const postType = useSelector(state => state.user.getPostType);
   const options = useSelector(state => state.user.interest);
   const myProfile = useSelector(state => state.user.myProfile);
 
@@ -42,7 +43,6 @@ const Post = props => {
   }, []);
 
   const renderItem = ({item}) => {
-    // console.log('item', item);
 
     return (
       <TouchableOpacity
@@ -72,7 +72,7 @@ const Post = props => {
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
     try {
-      const {data} = await axios({
+      const send = await axios({
         method: 'POST',
         url: url,
         data: {
@@ -82,10 +82,12 @@ const Post = props => {
         },
         headers: {Authorization: AuthStr, 'Content-Type': 'application/json'},
       });
-      setContent('');
-      setInterest('');
-      setMedia('');
-      dispatch(getStatusByUserInterestAction());
+      if (send) {
+        setContent('');
+        setInterest('');
+        setMedia('');
+        dispatch(getStatusByUserInterestAction());
+      }
     } catch (error) {
       console.log('err', error);
     }

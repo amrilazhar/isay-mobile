@@ -35,19 +35,18 @@ const PostCard = ({
   const dispatch = useDispatch();
   const [isLike, setIsLike] = useState(false);
   const myProfile = useSelector(state => state.user.myProfile);
+  const postType = useSelector(state => state.user.getPostType);
   const timeCreated = moment(new Date(postCreated)).fromNow();
   const myId = myProfile.id;
 
   useEffect(() => {
-    console.log('postcardJSline 39');
+    
     // dispatch(getMyProfileAction());
   }, []);
 
-  const handleLike = async statusLike => {
-    let url = `https://isay.gabatch11.my.id/status/${
-      statusLike ? 'like' : 'unlike'
-    }/${statusId}`;
-    console.log('statusId', statusId);
+  const handleLike = async () => {
+    let statusLike = likeCount?.find(ids => myId == ids) ? 'unlike' : 'like';
+    let url = `https://isay.gabatch11.my.id/status/${statusLike}/${statusId}`;
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
     axios({
@@ -56,10 +55,11 @@ const PostCard = ({
       headers: {Authorization: AuthStr},
     })
       .then(({data}) => {
-        // console.log('markerdata', data);
-        // dispatch(getStatusByUserInterestAction());
-        dispatch(getPostByInterestAction(interestId));
-        
+        if (postType === "" || postType === "userInterest") {
+          dispatch(getStatusByUserInterestAction());
+        } else {
+          dispatch(getPostByInterestAction(interestId));
+        }
       })
       .catch(err => {
         console.log('Error', err.message);
@@ -112,7 +112,7 @@ const PostCard = ({
             style={{flexDirection: 'row'}}
             onPress={() => {
               setIsLike(!isLike);
-              handleLike(!isLike);
+              handleLike();
             }}>
             <AntDesign
               color={

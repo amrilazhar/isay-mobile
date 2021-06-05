@@ -13,12 +13,14 @@ import CustomTextInput from '../components/common/CustomTextInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {getStatusByUserInterestAction} from '../redux/action/Action';
+import {firebase} from '@react-native-firebase/messaging';
+import jwt_decode from 'jwt-decode';
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
 
   // const [email, setEmail] = useState('lisanewell76@gmail.com');
-  const [email, setEmail] = useState('learningalfian@gmail.com');
+  const [email, setEmail] = useState('amrilazhar@gmail.com');
   const [password, setPassword] = useState('Aneh1234!!');
   // const [email, setEmail] = useState('user2@glintsmail.com');
 
@@ -37,7 +39,15 @@ const Login = ({navigation}) => {
       });
 
       AsyncStorage.setItem('accessToken', data.data.token);
-
+      let decodedToken = jwt_decode(data.data.token);
+      if (decodedToken.profile !== null) {
+        await firebase
+          .messaging()
+          .subscribeToTopic(`chat-${decodedToken.profile}`.toString());
+        await firebase
+          .messaging()
+          .subscribeToTopic(`notif-${decodedToken.profile}`.toString());
+      }
       try {
         const response = await axios({
           method: 'GET',
@@ -59,6 +69,7 @@ const Login = ({navigation}) => {
           alert('Please verify your email first');
         }
       } else {
+        console.log(error);
         alert('Network Error, Please Check Your Connection');
       }
     }

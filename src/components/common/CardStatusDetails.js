@@ -113,91 +113,92 @@ const CardStatusDetails = ({statusId, navigation, category}) => {
         </TouchableOpacity>
         <Entypo name="dots-three-horizontal" size={25} color={color.white} />
       </View>
-      <View style={styles.container}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View>
-              <Image
-                style={styles.logo}
-                source={{
-                  uri: `${postDetails?.owner?.avatar}`,
-                }}
-              />
+      <ScrollView>
+        <View style={styles.container}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View>
+                <Image
+                  style={styles.logo}
+                  source={{
+                    uri: `${postDetails?.owner?.avatar}`,
+                  }}
+                />
+              </View>
+              <View>
+                <Text style={styles.name}>{postDetails?.owner?.name}</Text>
+                <Text>{timeCreated}</Text>
+              </View>
             </View>
             <View>
-              <Text style={styles.name}>{postDetails?.owner?.name}</Text>
-              <Text>{timeCreated}</Text>
+              <CustomPersonalButton title={category} />
             </View>
           </View>
-          <View>
-            <CustomPersonalButton title={category} />
-          </View>
-        </View>
-        <ScrollView
-          style={{
-            height: 110,
-            borderWidth: 1,
-            borderColor: color.grey1,
-            marginTop: 0,
-            paddingHorizontal: 5,
-          }}>
-          <Text style={styles.textPost}>{postDetails.content}</Text>
-        </ScrollView>
+          <ScrollView
+            style={{
+              height: 110,
+              borderWidth: 1,
+              borderColor: color.grey1,
+              marginTop: 0,
+              paddingHorizontal: 5,
+            }}>
+            <Text style={styles.textPost}>{postDetails.content}</Text>
+          </ScrollView>
 
-        <View style={styles.style1}>
-          <View style={styles.style2}>
-            <AntDesign name="like2" size={20} />
-            <Text>Like {postDetails?.likeBy?.length} </Text>
+          <View style={styles.style1}>
+            <View style={styles.style2}>
+              <AntDesign name="like2" size={20} />
+              <Text>Like {postDetails?.likeBy?.length} </Text>
+            </View>
+            <View style={styles.style3}>
+              <Ionicons name="chatbubble-ellipses-outline" size={20} />
+              <Text>Comments {postDetails?.comment?.length}</Text>
+            </View>
+            <View style={styles.style4}>
+              <TouchableOpacity
+                style={{flexDirection: 'row'}}
+                onPress={() => {
+                  dispatch(getChatRoomAct(postDetails?.owner?._id));
+                  dispatch(chatMessageAct([]));
+                  navigation.navigate('Chat', {
+                    receiver: postDetails?.owner?._id,
+                  });
+                }}>
+                <Ionicons name="chatbubbles-outline" size={20} />
+                <Text>Personal chat </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.style3}>
-            <Ionicons name="chatbubble-ellipses-outline" size={20} />
-            <Text>Comments {postDetails?.comment?.length}</Text>
+          <View style={styles.load}>
+            <Text style={styles.loadMore}>Comments</Text>
           </View>
-          <View style={styles.style4}>
-            <TouchableOpacity
-              style={{flexDirection: 'row'}}
-              onPress={() => {
-                dispatch(getChatRoomAct(postDetails?.owner?._id));
-                dispatch(chatMessageAct([]));
-                navigation.navigate('Chat', {
-                  receiver: postDetails?.owner?._id,
-                });
-              }}>
-              <Ionicons name="chatbubbles-outline" size={20} />
-              <Text>Personal chat </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.load}>
-          <Text style={styles.loadMore}>Comments</Text>
-        </View>
 
-        <View style={{height: 320}}>{displayComments()}</View>
-      </View>
-      <View style={{justifyContent: 'flex-end', flex: 1}}>
-        <KeyboardAvoidingView style={{justifyContent: 'flex-end', flex: 1}}>
-          <View style={styles.postComment}>
-            <TextInput
-              style={styles.input}
-              placeholderTextColor={color.grey1}
-              placeholder={'Type Your Comment'}
-              onChangeText={setContent}
-              value={content}
+          <View style={{height: 320}}>{displayComments()}</View>
+        </View>
+      </ScrollView>
+
+      <View style={{justifyContent: 'flex-end'}}>
+        <View style={styles.postComment}>
+          <TextInput
+            style={styles.input}
+            placeholderTextColor={color.grey1}
+            placeholder={'Type Your Comment'}
+            onChangeText={setContent}
+            value={content}
+          />
+          <TouchableOpacity onPress={addComment}>
+            <MaterialCommunityIcons
+              name="send-circle"
+              size={40}
+              color={color.blue2}
             />
-            <TouchableOpacity onPress={addComment}>
-              <MaterialCommunityIcons
-                name="send-circle"
-                size={40}
-                color={color.blue2}
-              />
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

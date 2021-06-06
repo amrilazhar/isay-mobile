@@ -121,7 +121,7 @@ const PostCard = ({
               name="like1"
               size={20}
             />
-            <Text style={styles.text1}>Like {likeCount.length} </Text>
+            <Text style={styles.text1}>Like {likeCount.length > 99 ? '99+' : likeCount.length} </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.response2}>
@@ -131,7 +131,7 @@ const PostCard = ({
               dispatch(getStatusDetailsAction(statusId));
               navigation.navigate('StatusDetails', {statusId, category});
             }}>
-            <Text style={styles.text1}>Comments {commentCount} </Text>
+            <Text style={styles.text1}>Comments {commentCount > 99 ? '99+' : commentCount} </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.response2}>

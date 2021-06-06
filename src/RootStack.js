@@ -18,7 +18,7 @@ import UserProfile from './screen/UserProfile';
 const Stack = createStackNavigator();
 
 const RootStackScreen = ({navigation}) => (
-  <Stack.Navigator headerMode="none" initialRouteName="Login">
+  <Stack.Navigator headerMode="none" initialRouteName="Splash">
     <Stack.Screen name="Splash" component={Splash} />
     <Stack.Screen name="MainTab" component={MainTab} />
     <Stack.Screen name="Login" component={Login} />

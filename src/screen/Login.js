@@ -6,6 +6,7 @@ import {
   View,
   Image,
   Keyboard,
+  Appearance
 } from 'react-native';
 import axios from 'axios';
 import CustomButton from '../components/common/CustomButton';
@@ -15,13 +16,14 @@ import {useDispatch} from 'react-redux';
 import {getStatusByUserInterestAction} from '../redux/action/Action';
 import {firebase} from '@react-native-firebase/messaging';
 import jwt_decode from 'jwt-decode';
-
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('riwan75@gmail.com');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState('riwan75@gmail.com');
   // const [email, setEmail] = useState('lisanewell76@gmail.com');
   // const [email, setEmail] = useState('amrilazhar@gmail.com');
-  const [password, setPassword] = useState('Aneh1234!!');
+  // const [password, setPassword] = useState('Aneh1234!!');
   // const [email, setEmail] = useState('user2@glintsmail.com');
 
   const handleLogin = async () => {
@@ -41,6 +43,8 @@ const Login = ({navigation}) => {
       AsyncStorage.setItem('accessToken', data.data.token);
       let decodedToken = jwt_decode(data.data.token);
       if (decodedToken.profile !== null) {
+        await firebase.messaging().getToken();
+        await firebase.messaging().registerDeviceForRemoteMessages();
         await firebase
           .messaging()
           .subscribeToTopic(`chat-${decodedToken.profile}`.toString());
@@ -80,7 +84,11 @@ const Login = ({navigation}) => {
         <View style={{alignItems: 'center', marginVertical: 70}}>
           <Image
             style={styles.tinyLogo}
-            source={require('../assets/isaylogo.png')}
+            source={
+              Appearance.getColorScheme() === 'dark'
+                ? require('../assets/isaylogoputih.png')
+                : require('../assets/isaylogo.png')
+            }
           />
         </View>
         <Text style={styles.email}>E-mail</Text>

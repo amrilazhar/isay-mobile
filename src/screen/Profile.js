@@ -26,7 +26,7 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(getMyProfileAction());
-  }, [myProfile]);
+  }, []);
 
   const renderItem = ({item}) => {
     return <CustomPersonalButton title={item.interest} />;
@@ -51,10 +51,10 @@ const Profile = () => {
       },
       data: data,
     };
-
     axios(config)
       .then(function (response) {
         console.log(JSON.stringify(response.data));
+        dispatch(getMyProfileAction());
       })
       .catch(function (error) {
         console.log(error);
@@ -132,6 +132,7 @@ const Profile = () => {
               onPress={() => {
                 toggleModal();
                 updateBio();
+                dispatch(getMyProfileAction());
               }}>
               <Text style={styles.textbutton}>Finish</Text>
             </TouchableOpacity>

@@ -7,12 +7,20 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import {color} from '../../styles/color';
 import axios from 'axios';
+import {chatMessageAct, getChatRoomAct} from '../../redux/action/Chat';
+import {
+  getAnotherUserActivityAction,
+  getStatusByUserInterestAction,
+  getStatusDetailsAction,
+  getPostByInterestAction,
+} from '../../redux/action/Action';
 
 const ActivityCard = ({
   avatar,
@@ -24,16 +32,22 @@ const ActivityCard = ({
   likeCount,
   commentCount,
   userId,
+  navigation,
+  statusId,
+  category,
+  ownerId,
 }) => {
   const dispatch = useDispatch();
-  const timeCreated = moment(new Date(postCreated)).fromNow();
   const [isLike, setIsLike] = useState(false);
   const myProfile = useSelector(state => state.user.myProfile);
+  const postType = useSelector(state => state.user.getPostType);
+  const timeCreated = moment(new Date(postCreated)).fromNow();
   const myId = myProfile.id;
+ 
 
   const handleLike = async () => {
-    let url = `https://isay.gabatch11.my.id/status/like/${statusId}`;
-    console.log('statusId', statusId);
+    let statusLike = likeCount?.find(ids => myId == ids) ? 'unlike' : 'like';
+    let url = `https://isay.gabatch11.my.id/status/${statusLike}/${statusId}`;
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
     axios({
@@ -42,23 +56,27 @@ const ActivityCard = ({
       headers: {Authorization: AuthStr},
     })
       .then(({data}) => {
-        // console.log('markerdata', data);
-        dispatch(getStatusByUserInterestAction());
-        // success handling
+        dispatch(getAnotherUserActivityAction(ownerId));
+        if (postType === '' || postType === 'userInterest') {
+          dispatch(getStatusByUserInterestAction());
+        } else {
+          dispatch(getPostByInterestAction(interestId));
+        }
       })
       .catch(err => {
         console.log('Error', err.message);
-        // erro handling
       });
   };
 
   return (
     <View style={styles.container}>
       <View>
-        {type == 'post_comment' ? (
-          <Text>Commented On This Post</Text>
-        ) : (
+        {type === 'like_status' ? (
           <Text>Like This Post</Text>
+        ) : type === 'post_status' ? (
+          <Text>Post</Text>
+        ) : (
+          <Text>Commented On</Text>
         )}
       </View>
       <View style={styles.container1}>
@@ -123,14 +141,14 @@ const ActivityCard = ({
             <Text style={styles.text1}>Comments {commentCount?.length} </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={styles.response2}>
           <Ionicons name="chatbubbles-outline" size={20} />
           <Text
             style={styles.text1}
             onPress={() => {
-              dispatch(getChatRoomAct(userId));
+              dispatch(getChatRoomAct(ownerId));
               dispatch(chatMessageAct([]));
-              navigation.navigate('Chat', {receiver: userId});
+              navigation.navigate('Chat', {receiver: ownerId});
             }}>
             Personal chat
           </Text>
@@ -175,29 +193,32 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   text1: {
-    textAlign: 'center',
     marginLeft: 3,
   },
   response: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
     marginTop: 5,
-    borderWidth: 1,
-    borderColor: color.grey1,
-    paddingHorizontal: 5,
+    height: 40,
   },
   response1: {
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    borderRightWidth: 1,
+    borderWidth: 1,
     borderColor: color.grey1,
-    height: 35,
+    width: '23%',
+    height: '100%',
+    padding: 5,
   },
   response2: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRightWidth: 1,
+    justifyContent: 'center',
+    borderWidth: 1,
     borderColor: color.grey1,
+    width: '39%',
+    height: '100%',
+    padding: 5,
   },
   imageContent: {
     width: 130,

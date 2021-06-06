@@ -13,7 +13,7 @@ const PostHistory = ({navigation}) => {
     // console.log('historypost', historyPost);
     dispatch(getHistoryPostAction());
     dispatch(getMyProfileAction());
-  }, [historyPost]);
+  },[]);
 
   const renderItem = ({item}) => {
     // console.log(item);
@@ -29,6 +29,7 @@ const PostHistory = ({navigation}) => {
         postCreated={item?.created_at}
         category={item.interest[0].interest}
         userId={item?.owner?.id}
+        ownerId={item?.owner?.id}
         media={item?.media}
       />
     );

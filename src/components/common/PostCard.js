@@ -13,6 +13,7 @@ import {
   getStatusByUserInterestAction,
   getStatusDetailsAction,
   getPostByInterestAction,
+  getAnotherHistoryPostAction,
 } from '../../redux/action/Action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -40,7 +41,6 @@ const PostCard = ({
   const myId = myProfile.id;
 
   useEffect(() => {
-    
     // dispatch(getMyProfileAction());
   }, []);
 
@@ -55,7 +55,8 @@ const PostCard = ({
       headers: {Authorization: AuthStr},
     })
       .then(({data}) => {
-        if (postType === "" || postType === "userInterest") {
+        dispatch(getAnotherHistoryPostAction(ownerId))
+        if (postType === '' || postType === 'userInterest') {
           dispatch(getStatusByUserInterestAction());
         } else {
           dispatch(getPostByInterestAction(interestId));
@@ -105,7 +106,6 @@ const PostCard = ({
           );
         })}
       </View>
-
       <View style={styles.response}>
         <View style={styles.response1}>
           <TouchableOpacity
@@ -134,7 +134,7 @@ const PostCard = ({
             <Text style={styles.text1}>Comments {commentCount} </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={styles.response2}>
           <Ionicons name="chatbubbles-outline" size={20} />
           <Text
             style={styles.text1}
@@ -186,29 +186,32 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   text1: {
-    textAlign: 'center',
     marginLeft: 3,
   },
   response: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
     marginTop: 5,
-    borderWidth: 1,
-    borderColor: color.grey1,
-    paddingHorizontal: 5,
+    height: 40,
   },
   response1: {
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    borderRightWidth: 1,
+    borderWidth: 1,
     borderColor: color.grey1,
-    height: 35,
+    width: '23%',
+    height: '100%',
+    padding: 5,
   },
   response2: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRightWidth: 1,
+    justifyContent: 'center',
+    borderWidth: 1,
     borderColor: color.grey1,
+    width: '39%',
+    height: '100%',
+    padding: 5,
   },
   imageContent: {
     width: 130,

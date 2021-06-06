@@ -39,10 +39,10 @@ const TabUserProfile = ({userId, bio}) => {
 
 const Profile = () => {
   const anotherProfile = useSelector(state => state.user.anotherProfile);
-  const list = anotherProfile.interest
+  const list = anotherProfile.interest;
 
-  const renderItem = ({item}) => {   
-    return <CustomPersonalButton title={item?.interest}/>;
+  const renderItem = ({item}) => {
+    return <CustomPersonalButton title={item?.interest} />;
   };
 
   return (
@@ -72,10 +72,11 @@ const Profile = () => {
 const PostHistory = ({navigation}) => {
   const anotherHistoryPost = useSelector(state => state.user.anotherHistoryPost);
 
-  // console.log('hisPostAn', anotherHistoryPost);
+  useEffect(() => {
+    console.log('another id',anotherHistoryPost);
+  }, [])
 
   const renderItem = ({item}) => {
-    
     return (
       <PostCard
         name={item?.owner?.name}
@@ -88,13 +89,14 @@ const PostHistory = ({navigation}) => {
         statusId={item?.id}
         userId={item?.owner?.id}
         category={item?.interest[0]?.interest}
+        ownerId={item?.owner?._id}
         media={item?.media}
       />
     );
   };
 
   return (
-    <View style={{flex: 1, marginBottom: 70}}>
+    <View style={{flex: 1,}}>
       <FlatList
         data={anotherHistoryPost}
         renderItem={renderItem}
@@ -104,14 +106,16 @@ const PostHistory = ({navigation}) => {
   );
 };
 
-const Activities = () => {
-
-const anotherUserActivity = useSelector(state => state.user.anotherUserActivity);
-
+const Activities = ({navigation}) => {
+  const anotherUserActivity = useSelector(state => state.user.anotherUserActivity);
+  useEffect(() => {
+    console.log('anotherUser', anotherUserActivity);
+  }, []);
 
   const renderItem = ({item}) => {
     return (
       <ActivityCard
+        navigation={navigation}
         avatar={item?.status_id?.owner?.avatar}
         name={item?.status_id?.owner?.name}
         content={item?.status_id?.content}
@@ -119,8 +123,11 @@ const anotherUserActivity = useSelector(state => state.user.anotherUserActivity)
         media={item?.status_id?.media}
         likeCount={item?.status_id?.likeBy}
         commentCount={item?.status_id?.comment}
-        userId={item?.owner?._id}
+        userId={item?.owner}
+        ownerId={item?.owner}
         type={item?.type}
+        statusId={item?.status_id?.id}
+        category={item?.status_id?.interest[0]?.interest}
       />
     );
   };
@@ -133,7 +140,7 @@ const anotherUserActivity = useSelector(state => state.user.anotherUserActivity)
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   bio: {

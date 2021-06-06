@@ -315,7 +315,6 @@ export const getAnotherProfileAction = userId => {
 
 export const getNotification = () => {
   let url = 'https://isay.gabatch11.my.id/notif?page=1&limit=100';
-
   return async dispatch => {
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);

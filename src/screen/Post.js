@@ -20,6 +20,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {color} from '../styles/color';
 import {TextInput} from 'react-native-gesture-handler';
 import {
+  getHistoryPostAction,
   getInterestAction,
   getMyProfileAction,
   getStatusByUserInterestAction,
@@ -68,7 +69,7 @@ const Post = props => {
   };
 
   const post = async () => {
-    console.log('blob', media);
+    // console.log('blob', media);
     let url = 'https://isay.gabatch11.my.id/status/';
     const token = await AsyncStorage.getItem('accessToken');
     const AuthStr = 'Bearer '.concat(token);
@@ -80,7 +81,7 @@ const Post = props => {
     data.append('media', {
       uri: media.path,
       type: media.mime,
-      name: 'myfile'
+      name: 'myfile',
     });
     try {
       const send = await axios({
@@ -88,20 +89,17 @@ const Post = props => {
         url: url,
         data: data,
         headers: {Authorization: AuthStr},
-      });
-      console.log('send',send);
-      if (send) {
-        setContent('');
-        setInterest('');
-        setMedia('');
-        dispatch(getStatusByUserInterestAction());
-        
-      }
+      }).then;
+      // console.log('send', send);
+      setContent('');
+      setInterest('');
+      setMedia('');
+      dispatch(getStatusByUserInterestAction());
+      dispatch(getHistoryPostAction());
     } catch (error) {
       console.log('err', error);
     }
   };
-
 
   const openImagePicker = () => {
     ImagePicker.openPicker({
@@ -112,9 +110,8 @@ const Post = props => {
       includeBase64: true,
       // cropping: true,
     }).then(media => {
-      console.log('mymedia', media);
+      // console.log('mymedia', media);
       setMedia(media);
-      
     });
   };
 

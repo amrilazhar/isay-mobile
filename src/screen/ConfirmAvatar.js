@@ -14,6 +14,7 @@ import {getStatusByUserInterestAction} from '../redux/action/Action';
 import {color} from '../styles/color';
 
 const ConfirmAvatar = ({route, navigation}) => {
+  const dispatch = useDispatch();
   const {profile} = route.params;
 
   console.log('profile', profile);

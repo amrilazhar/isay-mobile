@@ -41,11 +41,10 @@ const CardStatusDetails = ({statusId, navigation, category}) => {
   const postDetails = useSelector(state => state.user.detailsStatus);
   const loading = useSelector(state => state.user.loading);
   const timeCreated = moment(new Date(postDetails.created_at)).fromNow();
+
   const comments = useSelector(state => state.user.allComments);
 
   useEffect(() => {
-    // console.log('postdetails',postDetails);
-
     dispatch(getAllCommentAction(status_id));
   }, []);
 
@@ -90,7 +89,7 @@ const CardStatusDetails = ({statusId, navigation, category}) => {
                 <View style={styles.user}>
                   <Text style={styles.name1}>{item?.owner?.name}</Text>
                   <Text style={styles.time}>
-                    {moment(item.created_at).startOf('day').fromNow()}
+                    {moment(item.created_at).fromNow()}
                   </Text>
                 </View>
                 <Text style={styles.textc}>{item?.content}</Text>

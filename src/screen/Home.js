@@ -37,6 +37,7 @@ const Home = ({navigation}) => {
   const [interestId, setInterestId] = useState('');
 
   useEffect(() => {
+    // console.log('show',show);
     dispatch(getInterestAction());
     dispatch(getMyProfileAction());
     dispatch(getPostByInterestAction(interestId));
@@ -54,7 +55,7 @@ const Home = ({navigation}) => {
         commentCount={item?.comment?.length}
         postCreated={item?.created_at}
         statusId={item?.id}
-        ownerId={item?.owner._id}
+        ownerId={item?.owner?._id}
         userId={item?.owner?.id}
         category={item.interest[0].interest}
         media={item.media}
@@ -139,7 +140,7 @@ const Home = ({navigation}) => {
         animationIn={'fadeInUp'}
         animationOut={'fadeOutDown'}
         useNativeDriver={true}
-        animationInTiming={1000}>
+        animationInTiming={500}>
         <View
           style={{
             backgroundColor: color.white,

@@ -16,9 +16,9 @@ import {getStatusByUserInterestAction} from '../redux/action/Action';
 
 const Login = ({navigation}) => {
   const dispatch = useDispatch();
-
+  const [email, setEmail] = useState('riwan75@gmail.com');
   // const [email, setEmail] = useState('lisanewell76@gmail.com');
-  const [email, setEmail] = useState('learningalfian@gmail.com');
+  // const [email, setEmail] = useState('learningalfian@gmail.com');
   const [password, setPassword] = useState('Aneh1234!!');
   // const [email, setEmail] = useState('user2@glintsmail.com');
 

@@ -30,7 +30,6 @@ const Register = ({navigation}) => {
         },
       });
 
-      console.log('run', data.data.token);
       AsyncStorage.setItem('accessToken', data.data.token);
 
       setEmail('');

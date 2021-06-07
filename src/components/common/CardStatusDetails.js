@@ -181,7 +181,6 @@ const CardStatusDetails = ({statusId, navigation, category}) => {
           <View style={{height: 320}}>{displayComments()}</View>
         </View>
       </ScrollView>
-
       <View style={{justifyContent: 'flex-end'}}>
         <View style={styles.postComment}>
           <TextInput

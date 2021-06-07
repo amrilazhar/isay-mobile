@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import {StyleSheet, Text, View, ImageBackground, Image} from 'react-native';
 import {firebase} from '@react-native-firebase/messaging';
 import jwt_decode from 'jwt-decode';
+import axios from 'axios';
 
 const Splash = ({navigation, route}) => {
   useEffect(() => {
@@ -18,8 +19,8 @@ const Splash = ({navigation, route}) => {
   const cekToken = async logout => {
     try {
       let token = await AsyncStorage.getItem('accessToken');
-      if (logout) {
-        let decodedToken = jwt_decode(token);
+      let decodedToken = jwt_decode(token);
+      if (logout) {        
         if (decodedToken.profile !== null) {
           await firebase.messaging().deleteToken();
           await firebase
@@ -33,7 +34,19 @@ const Splash = ({navigation, route}) => {
         navigation.navigate('Login');
       } else {
         if (token) {
-          navigation.navigate('MainTab');
+          try {
+            const response = await axios({
+              method: 'GET',
+              url: `https://isay.gabatch11.my.id/user/status_profile/${decodedToken.id}`,
+              headers: {
+                Authorization: 'Bearer ' + token,
+              },
+            });
+            navigation.navigate('MainTab');
+          } catch (error) {
+            console.log(error);
+            navigation.navigate('Question');
+          }
         } else {
           navigation.navigate('Login');
         }
